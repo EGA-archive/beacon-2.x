@@ -118,3 +118,6 @@ venv.bak/
 
 # IntelliJ
 .idea/
+
+# SASS
+ui/static/sass_marta/.sass-cache

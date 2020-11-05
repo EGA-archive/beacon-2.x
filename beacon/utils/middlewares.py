@@ -76,10 +76,9 @@ def setup(app):
     # Session middleware
     fernet_key = fernet.Fernet.generate_key()
     secret_key = base64.urlsafe_b64decode(fernet_key) # 32 url-safe base64-encoded bytes
-    storage = EncryptedCookieStorage(secret_key, cookie_name=SESSION_STORAGE)
-    session_setup(app, storage)
+    session_setup(app, EncryptedCookieStorage(secret_key))
 
-    # # CSRF middleware
+    # CSRF middleware
     # aiohttp_csrf.setup(app,
     #                    policy=aiohttp_csrf.policy.FormPolicy(CSRF_FIELD_NAME),
     #                    storage=aiohttp_csrf.storage.SessionStorage(SESSION_STORAGE))

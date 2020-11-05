@@ -55,6 +55,8 @@ routes = [
     ## HTML UI
     web.get('/'       , html.handlers.index  , name='home'   ),
     web.get('/privacy', html.handlers.privacy, name='privacy'),
+    web.get('/test', html.test_marta.handler_get),
+    web.post('/test', html.test_marta.handler_post, name='test_marta'),
 
     # Auth endpoints
     web.get('/login'  , html.auth.login      , name='login'  ),

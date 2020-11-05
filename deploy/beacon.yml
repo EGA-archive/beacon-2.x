@@ -23,6 +23,9 @@ services:
       - ./db/vacuum.sql.gz:/docker-entrypoint-initdb.d/3.sql.gz
     networks:
       - beacon-priv
+    ports:
+      - "5055:5432"
+
 
   beacon:
     build: ..
@@ -30,9 +33,9 @@ services:
     hostname: beacon
     container_name: beacon
     volumes:
-      # - ../beacon:/beacon/beacon  # inject the code, so we see the modifications "live"
-      # - ../ui/static:/beacon/ui/static
-      # - ../ui/templates:/beacon/ui/templates
+      - ../beacon:/beacon/beacon  # inject the code, so we see the modifications "live"
+      - ../ui/static:/beacon/ui/static
+      - ../ui/templates:/beacon/ui/templates
       - ./conf.py:/beacon/beacon/conf.py
       - ./logger.yml:/beacon/beacon/logger.yml
     ports:
