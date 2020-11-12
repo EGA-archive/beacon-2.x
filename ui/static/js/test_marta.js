@@ -5,6 +5,8 @@
     // Join target-selection to result-selection
     // ----------------------------------------------
 
+    var targetInstance = $("#target-instance");
+
     // define result-option-complex html chunks
     function updateOptions(selectedTarget) {
         var dataTarget = selectedTarget.attr("data-target");
@@ -18,7 +20,9 @@
         if (dataTarget == "individual") {optionsWrapper.html(individualChunk)} 
         else if (dataTarget == "sample") {optionsWrapper.html(sampleChunk)} 
         else if (dataTarget == "variant") {optionsWrapper.html(variantChunk)};
-        
+
+        // set targetInstance value
+        targetInstance.val(dataTarget);
     };
 
     // set at the beginning

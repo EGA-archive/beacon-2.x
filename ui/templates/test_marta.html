@@ -38,6 +38,8 @@
     <main>
       <form action="{{ url('test_marta') }}" method="POST">
         <section id="target-selection">
+            <input id="target-instance" type="hidden" name="targetInstance" value="">
+
             <div class="target-icon" data-target="sample"><i class="fas fa-vial"></i></div>
             <div class="target-icon active" data-target="individual"><i class="fas fa-male"></i></div>
             <div class="target-icon" data-target="variant"><i class="far fa-dot-circle"></i></div>

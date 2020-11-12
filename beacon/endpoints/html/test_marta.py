@@ -34,21 +34,19 @@ TEST_RESULT = [
 class Parameters(RequestParameters):
 
     # Variant filters
-    # variantQuery = RegexField(r'^\s*(?P<position>[1-9][0-9]*)\s+(?P<reference>[ACGT])\s*>\s*(?P<alternate>[ACGT])\s*$',
-    #                    required=False,
-    #                    ignore_case=True)
     variantQuery = RegexField(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s*\:\s*(\d+)\s+([ATCGN]+)\s*\>\s*(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$',
                        required=False,
                        ignore_case=True)
     variantType = Field(required=False)
-    referenceName = Field(required=False)
-    referenceBases = Field(required=False)
-    alternateBases = Field(required=False)
+    # referenceName = Field(required=False)
+    # referenceBases = Field(required=False)
+    # alternateBases = Field(required=False)
     assemblyId = Field(required=False)  # default="grch37.p1"
 
     datasets = ListField(items=Field(), trim=True, required=False)
     filters = ListField(items=Field(), trim=True, required=False)
 
+    targetInstance = Field(required=False)
     targetId = Field(required=False)
     resultOption = Field(required=False)
 
