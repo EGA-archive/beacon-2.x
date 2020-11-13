@@ -10,16 +10,18 @@
     // define result-option-complex html chunks
     function updateOptions(selectedTarget) {
         var dataTarget = selectedTarget.attr("data-target");
-
-        var individualChunk = "<div><input id='individual' type='radio' name='result-option' class='result-option' value='individual'> <label for='individual'>Show individual</label></div><div><input id='sample' type='radio' name='result-option' class='result-option' value='sample'> <label for='sample'>Show samples from individual</label></div><div><input id='variant' type='radio' name='result-option' class='result-option' value='variant'> <label for='variant'>Show variants from individual</label></div>"
-        var sampleChunk = "<div><input id='sample' type='radio' name='result-option' class='result-option' value='sample'> <label for='sample'>Show sample</label></div><div><input id='individual'  type='radio' name='result-option' class='result-option' value='individual'> <label for='individual'>Show individual</label></div><div><input id='variant' type='radio' name='result-option' class='result-option' value='variant'> <label for='variant'>Show variants in sample</label></div>"
-        var variantChunk = "<div><input id='variant' type='radio' name='result-option' class='result-option' value='variant'> <label for='variant'>Show variant</label></div><div><input id='individual' type='radio' name='result-option' class='result-option' value='individual'> <label for='individual'>Show individuals with variant</label></div><div><input id='sample' type='radio' name='result-option' class='result-option' value='sample'> <label for='sample'>Show samples with variant</label></div>"
     
         // change result-option-complex 
-        var optionsWrapper = $("#options-wrapper");
-        if (dataTarget == "individual") {optionsWrapper.html(individualChunk)} 
-        else if (dataTarget == "sample") {optionsWrapper.html(sampleChunk)} 
-        else if (dataTarget == "variant") {optionsWrapper.html(variantChunk)};
+        var optionsWrapperAll = $(".options-wrapper");
+        optionsWrapperAll.removeClass("active");
+
+        var optionsWrapperIndividual = $(".options-wrapper#individual-options");
+        var optionsWrapperSample = $(".options-wrapper#sample-options");
+        var optionsWrapperVariant = $(".options-wrapper#variant-options");
+
+        if (dataTarget == "individual") {optionsWrapperIndividual.addClass("active")} 
+        else if (dataTarget == "sample") {optionsWrapperSample.addClass("active")} 
+        else if (dataTarget == "variant") {optionsWrapperVariant.addClass("active")};
 
         // set targetInstance value
         targetInstance.val(dataTarget);
@@ -43,6 +45,9 @@
         // call function to update result-selection-complex options
         updateOptions($(this));
 
+        // reset targetId and resultOptions
+        $("#targetId").val("");
+        $("#result-selection-complex .result-option").prop("checked", false);
     });
 
 
@@ -55,9 +60,13 @@
 
         if ($(this).is("#result-selection-complex")) {
             $("#result-selection-all .result-option").prop("checked", false);
+            $("#result-selection-complex input").attr("required", true);
+
         } else if ($(this).is("#result-selection-all")) {
             $("#result-selection-complex .result-option").prop("checked", false);
             $("#result-selection-all .result-option").prop("checked", true);
+            $("#result-selection-complex input").val("");
+            $("#result-selection-complex input").attr("required", false);
         };
     });
 

@@ -40,9 +40,9 @@
         <section id="target-selection">
             <input id="target-instance" type="hidden" name="targetInstance" value="">
 
-            <div class="target-icon" data-target="sample"><i class="fas fa-vial"></i></div>
-            <div class="target-icon active" data-target="individual"><i class="fas fa-male"></i></div>
-            <div class="target-icon" data-target="variant"><i class="far fa-dot-circle"></i></div>
+            <div class="target-icon {% if targetInstance == 'sample' %}active{% endif %}" data-target="sample"><i class="fas fa-vial"></i></div>
+            <div class="target-icon {% if targetInstance == 'individual' %}active{% endif %}" data-target="individual"><i class="fas fa-male"></i></div>
+            <div class="target-icon {% if targetInstance == 'variant' %}active{% endif %}" data-target="variant"><i class="far fa-dot-circle"></i></div>
 
             <!-- Empty divs to show more targets are expected in the future -->
             <div class="target-icon empty"></div>
@@ -51,18 +51,28 @@
             <div class="target-icon empty"></div>
             <div class="target-icon empty"></div>
         </section>
-        <section id="result-selection-all" class="result-selection">
+        <section id="result-selection-all" class="result-selection {% if (targetInstance == resultOption) and not targetId %}active{% endif %}">
           <h1>Search all</h1>
-          <input type="hidden" type="radio" name="resultOption" class="result-option" id="result-option-all" value="">
+          <input type="radio" name="resultOption" class="result-option" id="result-option-all" value="all" style="display: none;" {% if (targetInstance == resultOption) and not targetId %}checked{% endif %}>
           <p>or</p>
         </section>
-        <section id="result-selection-complex" class="result-selection">
+        <section id="result-selection-complex" class="result-selection {% if targetId %}active{% endif %}">
           <h1>Search by ID</h1>
-          <input type="text" name="targetId">
-          <div id="options-wrapper">
-            <div><input id="individual" type="radio" name="resultOption" class="result-option" value="individual"> <label for="individual">Show individual</label></div>
-            <div><input id="sample" type="radio" name="resultOption" class="result-option" value="sample"> <label for="sample">Show samples from individual</label></div>
-            <div><input id="variant" type="radio" name="resultOption" class="result-option" value="variant"> <label for="variant">Show variants from individual</label></div>
+          <input type="text" id="targetId" name="targetId" value="{% if targetId %}{{ targetId }}{% endif %}">
+          <div class="options-wrapper {% if targetInstance == 'individual' %}active{% endif %}" id="individual-options">
+            <div><input id="individual-individual" type="radio" name="resultOption" class="result-option" value="individual" {% if targetId and resultOption == 'individual' and targetInstance == 'individual' %}checked{% endif %}> <label for="individual-individual">Show individual</label></div>
+            <div><input id="individual-sample" type="radio" name="resultOption" class="result-option" value="sample" {% if targetId and resultOption == 'sample' and targetInstance == 'individual' %}checked{% endif %}> <label for="individual-sample">Show samples from individual</label></div>
+            <div><input id="individual-variant" type="radio" name="resultOption" class="result-option" value="variant" {% if targetId and resultOption == 'variant' and targetInstance == 'individual' %}checked{% endif %}> <label for="individual-variant">Show variants from individual</label></div>
+          </div>
+          <div class="options-wrapper {% if targetInstance == 'sample' %}active{% endif %}" id="sample-options">
+            <div><input id="sample-sample" type="radio" name="resultOption" class="result-option" value="sample" {% if targetId and resultOption == 'sample' and targetInstance == 'sample' %}checked{% endif %}> <label for="sample-sample">Show sample</label></div>
+            <div><input id="sample-individual"  type="radio" name="resultOption" class="result-option" value="individual" {% if targetId and resultOption == 'individual' and targetInstance == 'sample' %}checked{% endif %}> <label for="sample-individual">Show individual</label></div>
+            <div><input id="sample-variant" type="radio" name="resultOption" class="result-option" value="variant" {% if targetId and resultOption == 'variant' and targetInstance == 'sample' %}checked{% endif %}> <label for="sample-variant">Show variants in sample</label></div> 
+          </div>
+          <div class="options-wrapper {% if targetInstance == 'variant' %}active{% endif %}" id="variant-options">
+            <div><input id="variant-variant" type="radio" name="resultOption" class="result-option" value="variant" {% if targetId and resultOption == 'variant' and targetInstance == 'variant' %}checked{% endif %}> <label for="variant-variant">Show variant</label></div>
+            <div><input id="variant-individual" type="radio" name="resultOption" class="result-option" value="individual" {% if targetId and resultOption == 'individual' and targetInstance == 'variant' %}checked{% endif %}> <label for="variant-individual">Show individuals with variant</label></div>
+            <div><input id="variant-sample" type="radio" name="resultOption" class="result-option" value="sample" {% if targetId and resultOption == 'sample' and targetInstance == 'variant' %}checked{% endif %}> <label for="variant-sample">Show samples with variant</label></div>
           </div>
         </section>
         <section id="filters">
@@ -71,11 +81,11 @@
           <select name="assemblyId">
             <option value="grch37.p1">grch37.p1</option>
           </select>
-          <input type="text" name="variantQuery">
+          <input type="text" name="variantQuery" value="{% if variantQuery %}{{ variantQuery }}{% endif %}">
           <p>Datasets</p>
-          <input type="text" name="datasets">
+          <input type="text" name="datasets" value="{% if datasets %}{{ datasets }}{% endif %}">
           <p>Ontologies</p>
-          <input type="text" name="filters">
+          <input type="text" name="filters" value="{% if filters %}{{ filters }}{% endif %}">
         </section>
         <section id="search-button">
           <input type="submit" value="Search"/>

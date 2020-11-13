@@ -1,5 +1,6 @@
 import logging
 import re
+import collections
 
 from aiohttp_jinja2 import template
 from aiohttp_session import get_session
@@ -31,13 +32,42 @@ TEST_RESULT = [
     {'individual_stable_id': 'NA24631', 'dataset_ids': '{GiaB}', 'taxon_id': 9606, 'taxon_id_ontology': 'NCBITaxon:9606', 'taxon_id_ontology_label': 'Homo sapiens', 'sex': 'male', 'sex_ontology': 'PATO:0000384', 'ethnicity': 'Han Chinese', 'ethnicity_ontology': 'HANCESTRO:0021', 'geographic_origin': 'United States of America', 'geographic_origin_ontology': 'GAZ:00002459', 'handovers': '{"{\\"url\\": \\"https://my.pgp-hms.org/profile/hu91BD69\\", \\"note\\": \\"Personal Genome Project Public Profile hu91BD69\\", \\"handoverType\\": {\\"id\\": \\"CUSTOM\\", \\"label\\": \\"pgp_public_profile\\"}}","{\\"url\\": \\"https://evidence.pgp-hms.org/genomes?display_genome_id=4832c699ec9b961e5cf20cddd73aa66fd19af6f7\\", \\"note\\": \\"GET-Evidence variant report for subject hu91BD69 (var-GS000037352-ASM.tsv.bz2)\\", \\"handoverType\\": {\\"id\\": \\"CUSTOM\\", \\"label\\": \\"pgp_variant_report\\"}}"}', 'pedigrees': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"pedigreeId\\\\\\": \\\\\\"ped1\\\\\\",\n    \\\\\\"numSubjects\\\\\\": 3,\n    \\\\\\"pedigreeRole\\\\\\": \\\\\\"NCIT:C64435\\\\\\",\n    \\\\\\"affectedStatus\\\\\\": null,\n    \\\\\\"pedigreeDisease\\\\\\": null\n}\\""}', 'diseases': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"stage\\\\\\": null,\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"diseaseId\\\\\\": \\\\\\"HP:0000545\\\\\\",\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"familyHistory\\\\\\": null\n}\\"","\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"stage\\\\\\": null,\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"diseaseId\\\\\\": \\\\\\"HP:0004789\\\\\\",\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"familyHistory\\\\\\": null\n}\\""}', 'phenotypic_features': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"phenotypeId\\\\\\": \\\\\\"NCIT:C3001\\\\\\"\n}\\""}', 'ontologies_used': '{""}', 'sra_family_id': 3150, 'race': 'asian', 'date_of_birth': '1979-08-07', 'weight_kg': 57, 'height_cm': 173, 'blood_type': 'A+', 'medications': '{}', 'procedures': '{}', 'alternative_ids': '{NIST_ID:HG005,PGP:hu91BD69}', 'alternative_ids_phenopackets': '{PGP:hu91BD69}'},{'individual_stable_id': 'NA24694', 'dataset_ids': '{GiaB}', 'taxon_id': 9606, 'taxon_id_ontology': 'NCBITaxon:9606', 'taxon_id_ontology_label': 'Homo sapiens', 'sex': 'male', 'sex_ontology': 'PATO:0000384', 'ethnicity': 'Han Chinese', 'ethnicity_ontology': 'HANCESTRO:0021', 'geographic_origin': 'United States of America', 'geographic_origin_ontology': 'GAZ:00002459', 'handovers': '{"{\\"url\\": \\"https://my.pgp-hms.org/profile/huCA017E\\", \\"note\\": \\"Personal Genome Project Public Profile hu91BD69\\", \\"handoverType\\": {\\"id\\": \\"CUSTOM\\", \\"label\\": \\"pgp_public_profile\\"}}","{\\"url\\": \\"https://evidence.pgp-hms.org/genomes?display_genome_id=b7b69569a4a8f8a624791ee411f6aaee604551f1\\", \\"note\\": \\"GET-Evidence variant report for subject huCA017E (CGI sample GS01175-DNA_B01 from PGP sample 86206034)\\", \\"handoverType\\": {\\"id\\": \\"CUSTOM\\", \\"label\\": \\"pgp_variant_report\\"}}"}', 'pedigrees': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"pedigreeId\\\\\\": \\\\\\"ped1\\\\\\",\n    \\\\\\"numSubjects\\\\\\": 3,\n    \\\\\\"pedigreeRole\\\\\\": \\\\\\"NCIT:C25174\\\\\\",\n    \\\\\\"affectedStatus\\\\\\": null,\n    \\\\\\"pedigreeDisease\\\\\\": null\n}\\""}', 'diseases': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"stage\\\\\\": null,\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"diseaseId\\\\\\": \\\\\\"HP:0008711\\\\\\",\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"familyHistory\\\\\\": null\n}\\"","\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"stage\\\\\\": null,\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"diseaseId\\\\\\": \\\\\\"ICD10CM:B18.1\\\\\\",\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"familyHistory\\\\\\": null\n}\\"","\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"stage\\\\\\": null,\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"diseaseId\\\\\\": \\\\\\"ICD10CM:B55\\\\\\",\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"familyHistory\\\\\\": null\n}\\""}', 'phenotypic_features': '{"\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"phenotypeId\\\\\\": \\\\\\"NCIT:C27083\\\\\\"\n}\\"","\\"beacon-individual-v2.0.0-draft.2\\"=>\\"{\n    \\\\\\"severity\\\\\\": null,\n    \\\\\\"onsetType\\\\\\": null,\n    \\\\\\"ageOfOnset\\\\\\": null,\n    \\\\\\"dateOfOnset\\\\\\": null,\n    \\\\\\"phenotypeId\\\\\\": \\\\\\"NCIT:C37967\\\\\\"\n}\\""}', 'ontologies_used': '{""}', 'sra_family_id': 3150, 'race': 'asian', 'date_of_birth': '1949-03-19', 'weight_kg': 64, 'height_cm': 167, 'blood_type': 'A+', 'medications': '{}', 'procedures': '{"{\\"date\\": \\"2010-05-01\\", \\"type\\": \\"teeth inplant\\"}"}', 'alternative_ids': '{NIST_ID:HG006,PGP:huCA017E}', 'alternative_ids_phenopackets': '{PGP:huCA017E}'},
 ]
 
+def _fetch_results(resultOption, targetInstance, qparams_db, datasets, authenticated):
+    """"
+    Decide which function is the appropriate depending on the targetInstance 
+    and the resultOption selected by the user.
+    """
+    func_parameters = [qparams_db, datasets, authenticated]
+    if resultOption == "variant":
+        if targetInstance == "variant":
+            return db.fetch_variants_by_variant(*func_parameters)
+        elif targetInstance == "sample":
+            return db.fetch_variants_by_biosample(*func_parameters)
+        elif targetInstance == "individual":
+            return db.fetch_variants_by_individual(*func_parameters)
+    elif resultOption == "individual":
+        if targetInstance == "variant":
+            return db.fetch_individuals_by_variant(*func_parameters)
+        elif targetInstance == "sample":
+            return db.fetch_individuals_by_biosample(*func_parameters)
+        elif targetInstance == "individual":
+            return db.fetch_individuals_by_individual(*func_parameters)
+    elif resultOption == "sample":
+        if targetInstance == "variant":
+            return db.fetch_biosamples_by_variant(*func_parameters)
+        elif targetInstance == "sample":
+            return db.fetch_biosamples_by_biosample(*func_parameters)
+        elif targetInstance == "individual":
+            return db.fetch_biosamples_by_individual(*func_parameters)
+
+
 class Parameters(RequestParameters):
 
     # Variant filters
     variantQuery = RegexField(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s*\:\s*(\d+)\s+([ATCGN]+)\s*\>\s*(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$',
                        required=False,
                        ignore_case=True)
-    variantType = Field(required=False)
+    # variantType = Field(required=False)
     # referenceName = Field(required=False)
     # referenceBases = Field(required=False)
     # alternateBases = Field(required=False)
@@ -56,14 +86,21 @@ async def handler_get(request):
     LOG.info('Running a viral GET request')
 
     # same as index
-    # csrf_token = await generate_token(request)
     # session = await get_session(request)
     # access_token = session.get('access_token')
     # datasets, authenticated = await resolve_token(access_token, [])
     # LOG.debug('Datasets: %s', datasets)
-    return {
-        'records': TEST_RESULT,
 
+    # Fetch datasets info
+    beacon_datasets = [r async for r in db.fetch_datasets_metadata()]
+    return {
+        'records': beacon_datasets,
+            'variantQuery': '',
+            'datasets': '',
+            'filters': '',
+            'targetInstance': 'individual',
+            'targetId': '',
+            'resultOption': 'individual',
         # 'request': request,
         # 'session': session,
         # 'assemblyIDs': await db.fetch_assemblyids(),
@@ -73,7 +110,6 @@ async def handler_get(request):
         # 'filters': set(),
         # 'beacon_response': None,
         # 'cookies': request.cookies,
-        # 'csrf_token': f'<input type="hidden" name="{middlewares.CSRF_FIELD_NAME}" value="{csrf_token}" />',
     }
 
 
@@ -84,8 +120,6 @@ async def handler_post(request):
     LOG.info('Running a viral POST request')
 
     # same as index
-    # csrf_token = await generate_token(request)
-
     # session = await get_session(request)
     # access_token = session.get('access_token')
     # allowedDatasets, authenticated = await resolve_token(access_token, [])
@@ -104,30 +138,82 @@ async def handler_post(request):
     except BeaconBadRequest as bad:
         LOG.error('Bad request %s', bad)
         return {
-            'variantQuery': qparams_raw.get('variantQuery',''),
+            'variantQuery': '',
+            'datasets': '',
+            'filters': '',
+            'targetInstance': 'individual',
+            'targetId': '',
+            'resultOption': 'individual',
             'errors': str(bad),
             'records': [],
-            # 'csrf_token': f'<input type="hidden" name="{middlewares.CSRF_FIELD_NAME}" value="{csrf_token}" />',
         }
 
     # parsing the variantQuery
+    chromosome = None
+    position = None
+    reference = None
+    alternate = None
+
     if qparams_raw.get('variantQuery'):
         field = proxy.__fields__.get('variantQuery') # must exist
         flags = re.I if field.ignore_case else 0
         m = re.match(field.pattern, qparams_db.variantQuery, flags=flags)
         assert(m)
-        chromosome = int(m.group(1))
+        chromosome = m.group(1)
         position = int(m.group(2))
         reference = m.group(3).upper()
         alternate = m.group(4).upper()
+        LOG.debug("""
+        Chromosome: %s
+        Position: %s
+        Reference: %s
+        Alternate: %s""", 
+        chromosome, position, reference, alternate)
 
+    # prepare qparams
+    parameters = {
+        "variantType": None,  # HARDCODED
+        "start": tuple([position]) if position else tuple(),  # two items tuple
+        "end": tuple(),  # two items tuple
+        "referenceName": chromosome,
+        "referenceBases": reference,
+        "alternateBases": alternate,
+        "assemblyId": qparams_db.assemblyId,
+        "filters": qparams_db.filters,
+        "skip": 0,
+        "limit": 10,
+        "requestedSchema": [None], # list
+        "requestedAnnotationSchema": [None], # list
+        "targetIdReq": qparams_db.targetId,
+        "includeDatasetResponses": None
+    }
+    LOG.debug("Parameters:")
+    LOG.debug(parameters)
+    qparams = collections.namedtuple('test_marta', parameters.keys())(*parameters.values())
 
     # DB call
-    # records = await fetch_snp_variants(position, None, reference, alternate)])
-    records = []
+    response = _fetch_results(qparams_db.resultOption, qparams_db.targetInstance, qparams, None, None)
+    LOG.debug("Response:")
+    LOG.debug(response)
 
+    if not response:
+        return {
+            'records': [],
+            'variantQuery': qparams_raw.get('variantQuery',''),
+            'datasets': qparams_raw.get('datasets',''),
+            'filters': qparams_raw.get('filters',''),
+            'targetInstance': qparams_raw.get('targetInstance',''),
+            'targetId': qparams_raw.get('targetId',''),
+            'resultOption': qparams_raw.get('resultOption',''),
+        }
+        
+    records = [row async for row in response]
     return {
+        'records': records,
         'variantQuery': qparams_raw.get('variantQuery',''),
-        'records': TEST_RESULT,
-        # 'csrf_token': f'<input type="hidden" name="{middlewares.CSRF_FIELD_NAME}" value="{csrf_token}" />',
+        'datasets': qparams_raw.get('datasets',''),
+        'filters': qparams_raw.get('filters',''),
+        'targetInstance': qparams_raw.get('targetInstance',''),
+        'targetId': qparams_raw.get('targetId',''),
+        'resultOption': qparams_raw.get('resultOption',''),
     }

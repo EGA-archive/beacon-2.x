@@ -193,9 +193,15 @@ body {
                 > input {
                     margin: 5px 10px;
                 }
-                #options-wrapper {
-                    display: flex;
+                input:invalid, input:required {
+                    box-shadow: none;
+                }
+                .options-wrapper {
+                    display: none;
                     flex-flow: column nowrap;
+                    &.active {
+                        display: flex;
+                    }
                     
                     div {
                         margin: 10px;
@@ -259,6 +265,7 @@ body {
             overflow: scroll;
 
             table {
+                width: 100%;
                 // font-family: 'IBM Plex Mono', monospace;
                 th, td {
                     padding: 10px 15px;
