@@ -1,0 +1,20 @@
+<div id="table-wrapper">
+    <table id="main-result">
+        <thead>
+            <tr>
+                {% for column_name in records[0].keys() %}
+                <th>{{column_name}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records%}
+            <tr>
+                {% for column_value in record.values() %}
+                <td>{{ column_value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

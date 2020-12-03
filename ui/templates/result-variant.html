@@ -1,0 +1,120 @@
+<div id="table-wrapper">
+    <table id="main-result">
+        <thead>
+            <tr>
+                <th>Variant ID</th>
+                <th>Assembly ID</th>
+                <th>Chromosome</th>
+                <th>RefSeq ID</th>
+                <th>Variant Name</th>
+                <th>Reference</th>
+                <th>Alternate</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Variant Type</th>
+                <th>Genomic HGVS ID</th>
+                <th>Transcript HGVS IDs</th>
+                <th>Protein HGVS IDs</th>
+                <th>Genomic Regions</th>
+                <th>Genomic Features</th>
+                <th>Molecular Effects</th>
+                <th>Aminoacid Changes</th>
+                <th>Ontologies Used</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.variant_id|default("-",true) }}</td>
+                    <td>{{ record.assembly_id|default("-",true) }}</td>
+                    <td>{{ record.chromosome|default("-",true) }}</td>
+                    <td>{{ record.refseq_id|default("-",true) }}</td>
+                    <td>{{ record.variant_name|default("-",true) }}</td>
+                    <td>{{ record.reference|default("-",true) }}</td>
+                    <td>{{ record.alternate|default("-",true) }}</td>
+                    <td>{{ record.start|default("-",true) }}</td>
+                    <td>{{ record.end|default("-",true) }}</td>
+                    <td>{{ record.variant_type|default("-",true) }}</td>
+                    <td>{{ record.genomic_hgvs_id|default("-",true) }}</td>
+                    <td>{{ record.transcript_hgvs_ids|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.protein_hgvs_ids|default("-",true)|join(", ") }}</td>
+                    <td title="Ontology term: {{record.genomic_regions_ontology|default("-",true)|join(", ")}}">{{ record.genomic_regions|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.genomic_features_ontology|default("-",true)|join(", ") }}</td>
+                    <td title="Ontology term: {{record.molecular_effects_ontology|default("-",true)|join(", ")}}">{{ record.molecular_effects|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.aminoacid_changes|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.ontologies_used|default("-",true)|join(", ") }}</td>
+                    <td class="hidden">
+                        <h1><i class="fas fa-times close-button"></i>{{ record.variant_id|default("-",true) }}</h1>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                    
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="extra-info" class="hidden">
+</div>

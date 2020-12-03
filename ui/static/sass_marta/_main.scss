@@ -262,24 +262,77 @@ body {
         div#main {
             width: 100%;
             background-color: white;
-            overflow: scroll;
+            overflow: hidden;
+            display: flex;
 
-            table {
-                width: 100%;
-                // font-family: 'IBM Plex Mono', monospace;
-                th, td {
-                    padding: 10px 15px;
-                    border-bottom: 1px solid $blue-light;
-                    border-right: 1px solid $blue-light;
-                }
+            #table-wrapper {
+                overflow: scroll;
+                table {
+                    width: 100%;
+                    // font-family: 'IBM Plex Mono', monospace;
+                    th, td {
+                        padding: 10px 15px;
+                        border-bottom: 1px solid $blue-light;
+                        border-right: 1px solid $blue-light;
+                    }
+    
+                    thead {
+                        background-color: $blue-light;
+                        th { font-weight: bold; }
+                    }
+                    tbody tr {
+                        cursor: pointer;
+                        td { font-weight: 300; }
+                        &:hover, &.active {background-color: $blue-medium;}
+                    }
 
-                thead {
-                    background-color: $blue-light;
-                    th { font-weight: bold; }
+                    td.hidden {
+                        display: none;
+                    }
+                    
                 }
-                tbody tr {
-                    td { font-weight: 300; }
-                    &:hover {background-color: $blue-medium;}
+            }
+
+            #extra-info {
+                width: 600px;
+                overflow: hidden;
+
+                &.hidden {
+                    display: none;
+                }
+                h1 {
+                    font-weight: bold;
+                    padding: 1em;
+                    i {
+                        margin: 0 10px 0 -5px;
+                        color: $grey-dark;
+                        cursor: pointer;
+                        &:hover { color: $blue-dark;}
+                    }
+                }
+                section {
+                    h2 {
+                        width: 100%;
+                        background-color: $blue-light;
+                        font-weight: bold;
+                        padding: 0.5em;
+                    }
+                    .extra-info-table-wrapper {
+                        overflow-x: scroll;
+                        table {
+                            th, td {
+                                padding: 5px 10px;
+                                font-weight: 300;
+                            }
+                            thead th {
+                                color: #9e9e9e;
+                                font-size: 80%;
+                            }
+                            tbody tr:hover {
+                                 background-color: $blue-medium;
+                            }
+                        }
+                    }
                 }
             }
         }

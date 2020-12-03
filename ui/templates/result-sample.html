@@ -1,0 +1,108 @@
+<div id="table-wrapper">
+    <table id="main-result">
+        <thead>
+            <tr>
+                <th>Biosample ID</th>
+                <th>Individual ID</th>
+                <th>Description</th>
+                <th>Biosample Status</th>
+                <th>Obtention Procedure</th>
+                <th>Tumor Progression</th>
+                <th>Tumor Grade</th>
+                <th>Individual Age at Collection</th>
+                <th>Collection Date</th>
+                <th>Alternative IDs</th>
+                <th>Study ID</th>
+                <th>Bioproject ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.biosample_stable_id|default("-",true) }}</td>
+                    <td>{{ record.individual_stable_id|default("-",true) }}</td>
+                    <td>{{ record.description|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.biosample_status_ontology|default("-",true)}}">{{ record.biosample_status_ontology_label|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.obtention_procedure_ontology|default("-",true)}}">{{ record.obtention_procedure_ontology_label|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.tumor_progression_ontology|default("-",true)}}">{{ record.tumor_progression_ontology_label|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.tumor_grade_ontology|default("-",true)}}">{{ record.tumor_grade_ontology_label|default("-",true) }}</td>
+                    <td>{{ record.individual_age_at_collection|default("-",true) }}</td>
+                    <td>{{ record.collection_date|default("-",true) }}</td>
+                    <td>{{ record.alternative_ids|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.study_id|default("-",true) }}</td>
+                    <td>{{ record.bioproject_id|default("-",true) }}</td>
+
+                    <td class="hidden">
+                        <h1><i class="fas fa-times close-button"></i>{{ record.biosample_stable_id|default("-",true) }}</h1>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                    
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="extra-info" class="hidden">
+</div>

@@ -23,6 +23,9 @@
 	  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">  <!-- font-family: 'Roboto Mono', monospace; -->
     <!-- End Fonts -->
 
+    <!-- Plugins -->
+    <!-- End Plugins -->
+
     <link rel="icon" href="//beacon-project.io/assets/img/site-specific/site-logo-topleft.png">
 
   </head>
@@ -92,25 +95,18 @@
         </section>  
       </form>
       <div id="main">
-        {% if records %}
-        <table>
-          <thead>
-            <tr>
-              {% for column_name in records[0].keys() %}
-              <th>{{ column_name }}</th>
-              {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in records[:10] %}
-              <tr>
-                {% for data in row.values() %}
-                <td>{% if len(data|string) < 20 %}  {{ data }} {% else %} ... {% endif%}</td>
-                {% endfor %}
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        {% if records and not homepage %}
+          {% if resultOption == "individual" %}
+              {% include "result-individual.html" %}
+            {% elif resultOption == "sample" %}
+              {% include "result-sample.html" %}
+            {% elif resultOption == "variant" %}
+              {% include "result-variant.html" %}
+            {% else %}
+              <p>No results. Try again, please.</p>
+          {% endif %}
+        {% else %}
+          {% include "result-homepage.html" %}
         {% endif %}
       </div>
     </main>
@@ -118,11 +114,18 @@
       <p>&copy; Copyright 2020</p>
     </footer>
 
+    <!-- JQuery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ static('js/jquery.min.js') }}">\x3C/script>')</script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script>
-  
+    <!-- End Jquery -->
+
+    <!-- Custom -->
     <script src="{{ static('js/test_marta.js') }}"></script>
+    <!-- End Custom -->
+
+    <!-- Plugins -->
+    <!-- End Plugins -->
 
   </body>
 </html>

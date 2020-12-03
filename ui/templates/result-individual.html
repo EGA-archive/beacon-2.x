@@ -1,0 +1,111 @@
+<div id="table-wrapper">
+    <table id="main-result">
+        <thead>
+            <tr>
+                <th>Individual ID</th>
+                <th>Datasets IDs</th>
+                <th>Taxon</th>
+                <th>Sex</th>
+                <th>Ethnicity</th>
+                <th>Geographic Origin</th>
+                <th>SRA Family ID</th>
+                <th>Race</th>
+                <th>Date Of Birth</th>
+                <th>Weight</th>
+                <th>Height</th>
+                <th>Blood Type</th>
+                <th>Alternative IDs</th>
+                <th>Alternative IDs Phenopackets</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>{{ record.individual_stable_id|default("-",true) }}</td>
+                    <td>{{ record.dataset_ids|default("-",true)|join(", ") }}</td>
+                    <td title="Ontology term: {{record.taxon_id_ontology|default("-",true)}}">{{ record.taxon_id_ontology_label|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.sex_ontology|default("-",true)}}">{{ record.sex|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.ethnicity_ontology|default("-",true)}}">{{ record.ethnicity|default("-",true) }}</td>
+                    <td title="Ontology term: {{record.geographic_origin_ontology|default("-",true)}}">{{ record.geographic_origin|default("-",true) }}</td>
+                    <td>{{ record.sra_family_id|default("-",true) }}</td>
+                    <td>{{ record.race|default("-",true) }}</td>
+                    <td>{{ record.date_of_birth|default("-",true) }}</td>
+                    <td>{{ record.weight_kg|default("-",true) }}</td>
+                    <td>{{ record.height_cm|default("-",true) }}</td>
+                    <td>{{ record.blood_type|default("-",true) }}</td>
+                    <td>{{ record.alternative_ids|default("-",true)|join(", ") }}</td>
+                    <td>{{ record.alternative_ids_phenopackets|default("-",true)|join(", ") }}</td>
+                    <td class="hidden">
+                        <h1><i class="fas fa-times close-button"></i>{{ record.individual_stable_id|default("-",true) }}</h1>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section>
+                            <h2>Medications</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>name</th>
+                                            <th>dosage</th>
+                                            <th>frequency</th>
+                                            <th>start</th>
+                                            <th>end</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                        <tr>
+                                            <td>FOSAMAX</td>    
+                                            <td>70 mg</td>    
+                                            <td>weekly</td>    
+                                            <td>2010-09-01</td>    
+                                            <td>2010-10-01</td>    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                    
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="extra-info" class="hidden">
+</div>

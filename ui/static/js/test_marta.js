@@ -70,4 +70,32 @@
         };
     });
 
+
+    // ----------------------------------------------
+    // Extra info
+    // ----------------------------------------------
+
+    var mainTable = $("#main-result");
+    var extraInfo = $("#extra-info");
+
+   
+    mainTable.on("click", "tr", function(){
+        // update content
+        var me = $(this);
+        var extraInfoHTML = me.find("td.hidden").html();
+        extraInfo.html(extraInfoHTML);
+        // for closing
+        extraInfo.on("click", "i.close-button", function(){
+            extraInfo.addClass("hidden");
+            me.removeClass("active");
+        });
+        // make side panel visible
+        extraInfo.removeClass("hidden");
+        // highlight row
+        mainTable.find("tr").removeClass("active");
+        me.addClass("active");
+    });
+
+
+
 })();
