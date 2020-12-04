@@ -2,6 +2,7 @@
     <table id="main-result">
         <thead>
             <tr>
+                <th class="extra-info-trigger"></th>
                 <th>Biosample ID</th>
                 <th>Individual ID</th>
                 <th>Description</th>
@@ -19,6 +20,7 @@
         <tbody>
             {% for record in records %}
                 <tr>
+                    <td class="extra-info-trigger" title="Click to open a side panel with extra information."><i class="far fa-plus-square"></i></td>
                     <td>{{ record.biosample_stable_id|default("-",true) }}</td>
                     <td>{{ record.individual_stable_id|default("-",true) }}</td>
                     <td>{{ record.description|default("-",true) }}</td>

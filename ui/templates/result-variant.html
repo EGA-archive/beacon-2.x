@@ -2,6 +2,7 @@
     <table id="main-result">
         <thead>
             <tr>
+                <th class="extra-info-trigger"></th>
                 <th>Variant ID</th>
                 <th>Assembly ID</th>
                 <th>Chromosome</th>
@@ -26,6 +27,7 @@
         <tbody>
             {% for record in records %}
                 <tr>
+                    <td class="extra-info-trigger" title="Click to open a side panel with extra information."><i class="far fa-plus-square"></i></td>
                     <td>{{ record.variant_id|default("-",true) }}</td>
                     <td>{{ record.assembly_id|default("-",true) }}</td>
                     <td>{{ record.chromosome|default("-",true) }}</td>

@@ -2,6 +2,7 @@
     <table id="main-result">
         <thead>
             <tr>
+                <th class="extra-info-trigger"></th>
                 <th>Individual ID</th>
                 <th>Datasets IDs</th>
                 <th>Taxon</th>
@@ -21,6 +22,7 @@
         <tbody>
             {% for record in records %}
                 <tr>
+                    <td class="extra-info-trigger" title="Click to open a side panel with extra information."><i class="far fa-plus-square"></i></td>
                     <td>{{ record.individual_stable_id|default("-",true) }}</td>
                     <td>{{ record.dataset_ids|default("-",true)|join(", ") }}</td>
                     <td title="Ontology term: {{record.taxon_id_ontology|default("-",true)}}">{{ record.taxon_id_ontology_label|default("-",true) }}</td>

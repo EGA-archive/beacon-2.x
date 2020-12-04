@@ -79,21 +79,21 @@
     var extraInfo = $("#extra-info");
 
    
-    mainTable.on("click", "tr", function(){
+    mainTable.on("click", "td.extra-info-trigger", function(){
         // update content
         var me = $(this);
-        var extraInfoHTML = me.find("td.hidden").html();
+        var extraInfoHTML = me.siblings("td.hidden").html();
         extraInfo.html(extraInfoHTML);
         // for closing
         extraInfo.on("click", "i.close-button", function(){
             extraInfo.addClass("hidden");
-            me.removeClass("active");
+            me.parent().removeClass("active");
         });
         // make side panel visible
         extraInfo.removeClass("hidden");
         // highlight row
         mainTable.find("tr").removeClass("active");
-        me.addClass("active");
+        me.parent().addClass("active");
     });
 
 

@@ -281,20 +281,26 @@ body {
                         th { font-weight: bold; }
                     }
                     tbody tr {
-                        cursor: pointer;
                         td { font-weight: 300; }
-                        &:hover, &.active {background-color: $blue-medium;}
+                        &:hover, &.active {
+                            background-color: $blue-medium;
+                            td.extra-info-trigger { color: $blue-dark;}
+                        }
                     }
 
                     td.hidden {
                         display: none;
                     }
-                    
+                    td.extra-info-trigger {
+                        cursor: pointer;
+                        color: $grey-dark;
+                        &:hover { color: $blue-dark; }
+                    }
                 }
             }
 
             #extra-info {
-                width: 600px;
+                min-width: 400px;
                 overflow: hidden;
 
                 &.hidden {
