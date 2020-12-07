@@ -35,71 +35,76 @@
                     <td>{{ record.bioproject_id|default("-",true) }}</td>
 
                     <td class="hidden">
-                        <h1><i class="fas fa-times close-button"></i>{{ record.biosample_stable_id|default("-",true) }}</h1>
+                        <h1><i class="fas fa-times close-button"></i>Sample {{ record.biosample_stable_id|default("-",true) }}</h1>
                         <section>
-                            <h2>Medications</h2>
+                            <h2>Sample Origins</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>name</th>
-                                            <th>dosage</th>
-                                            <th>frequency</th>
-                                            <th>start</th>
-                                            <th>end</th>
+                                            <th>sampleOriginType</th>
+                                            <th>sampleOriginDetail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for sample in record.sample_origins.parsed %}
                                         <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
+                                            <td>{{ sample.sampleOriginType }}</td>
+                                            <td>{{ sample.sampleOriginDetail }}</td>
                                         </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </section>
                         <section>
-                            <h2>Medications</h2>
+                            <h2>Sample Origins Ontology</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>name</th>
-                                            <th>dosage</th>
-                                            <th>frequency</th>
-                                            <th>start</th>
-                                            <th>end</th>
+                                            <th>sampleOriginType</th>
+                                            <th>sampleOriginDetail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for sample in record.sample_origins_ontology.parsed %}
                                         <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
+                                            <td>{{ sample.sampleOriginType }}</td>
+                                            <td>{{ sample.sampleOriginDetail }}</td>
                                         </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
-                        </section>                    
+                        </section>
+                        <section>
+                            <h2>Handovers</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>note</th>
+                                            <th>handoverType</th>
+                                            <th>url</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for handover in record.handovers.parsed %}
+                                        <tr>
+                                            <td class="handover-cell">
+                                                <a href="{{handover.url}}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                            </td>
+                                            <td>{{ handover.note }}</td>
+                                            <td>{{handover.handoverType.id}}:{{handover.handoverType.label}}</td>
+                                            <td class="handover-cell"><a href="{{handover.url}}" target="_blank">{{ handover.url }}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
                     </td>
                 </tr>
             {% endfor %}

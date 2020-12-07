@@ -134,6 +134,7 @@ async def handler_post(request):
             'resultOption': 'individual',
             'errors': str(bad),
             'records': [],
+            'homepage': False
         }
 
     # parsing the variantQuery
@@ -185,14 +186,16 @@ async def handler_post(request):
     LOG.debug(response)
 
     if not response:
+        LOG.debug("No Response")
         return {
             'records': [],
             'variantQuery': qparams_raw.get('variantQuery',''),
             'datasets': qparams_raw.get('datasets',''),
             'filters': qparams_raw.get('filters',''),
-            'targetInstance': qparams_raw.get('targetInstance',''),
+            'targetInstance': qparams_raw.get('targetInstance','individual'),
             'targetId': qparams_raw.get('targetId',''),
-            'resultOption': qparams_raw.get('resultOption',''),
+            'resultOption': qparams_raw.get('resultOption','individual'),
+            'homepage': False
         }
 
     records = [row async for row in response]
@@ -205,4 +208,5 @@ async def handler_post(request):
         'targetInstance': qparams_raw.get('targetInstance',''),
         'targetId': qparams_raw.get('targetId',''),
         'resultOption': qparams_raw.get('resultOption',''),
+        'homepage': False
     }

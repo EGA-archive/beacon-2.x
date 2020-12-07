@@ -38,7 +38,7 @@
                     <td>{{ record.alternative_ids|default("-",true)|join(", ") }}</td>
                     <td>{{ record.alternative_ids_phenopackets|default("-",true)|join(", ") }}</td>
                     <td class="hidden">
-                        <h1><i class="fas fa-times close-button"></i>{{ record.individual_stable_id|default("-",true) }}</h1>
+                        <h1><i class="fas fa-times close-button"></i>Individual {{ record.individual_stable_id|default("-",true) }}</h1>
                         <section>
                             <h2>Medications</h2>
                             <div class="extra-info-table-wrapper">
@@ -53,56 +53,153 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
+                                        {% for medication in record.medications.parsed %}
+                                            <tr>
+                                                <td>{{ medication.name }}</td>    
+                                                <td>{{ medication.dosage }}</td>    
+                                                <td>{{ medication.frequency }}</td>    
+                                                <td>{{ medication.start }}</td>    
+                                                <td>{{ medication.end }}</td>    
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </section>
                         <section>
-                            <h2>Medications</h2>
+                            <h2>Procedures</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>name</th>
-                                            <th>dosage</th>
-                                            <th>frequency</th>
-                                            <th>start</th>
-                                            <th>end</th>
+                                            <th>type</th>
+                                            <th>date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for procedure in record.procedures.parsed %}
                                         <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
+                                            <td>{{ procedure.type }}</td>    
+                                            <td>{{ procedure.date }}</td>    
                                         </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </section>                    
+                        <section>
+                            <h2>Pedigrees</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>pedigreeId</th>
+                                            <th>numSubjects</th>
+                                            <th>pedigreeRole</th>
+                                            <th>affectedStatus</th>
+                                            <th>pedigreeDisease</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for pedigree in record.pedigrees.parsed %}
+                                        <tr>
+                                            <td>{{ pedigree.pedigreeId }}</td>
+                                            <td>{{ pedigree.numSubjects }}</td>
+                                            <td>{{ pedigree.pedigreeRole }}</td>
+                                            <td>{{ pedigree.affectedStatus }}</td>
+                                            <td>{{ pedigree.pedigreeDisease }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>      
+                        <section>
+                            <h2>Diseases</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>diseaseId</th>
+                                            <th>stage</th>
+                                            <th>severity</th>
+                                            <th>onsetType</th>
+                                            <th>ageOfOnset</th>
+                                            <th>dateOfOnset</th>
+                                            <th>familyHistory</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for disease in record.diseases.parsed %}
+                                        <tr>
+                                            <td>{{ disease.diseaseId }}</td>
+                                            <td>{{ disease.stage }}</td>
+                                            <td>{{ disease.severity }}</td>
+                                            <td>{{ disease.onsetType }}</td>
+                                            <td>{{ disease.ageOfOnset }}</td>
+                                            <td>{{ disease.dateOfOnset }}</td>
+                                            <td>{{ disease.familyHistory }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>      
+                        <section>
+                            <h2>Phenotypic Features</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>phenotypeId</th>
+                                            <th>severity</th>
+                                            <th>onsetType</th>
+                                            <th>ageOfOnset</th>
+                                            <th>dateOfOnset</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for feature in record.phenotypic_features.parsed %}
+                                        <tr>
+                                            <td>{{ feature.phenotypeId }}</td>
+                                            <td>{{ feature.severity }}</td>
+                                            <td>{{ feature.onsetType }}</td>
+                                            <td>{{ feature.ageOfOnset }}</td>
+                                            <td>{{ feature.dateOfOnset }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section>
+                            <h2>Handovers</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>note</th>
+                                            <th>handoverType</th>
+                                            <th>url</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for handover in record.handovers.parsed %}
+                                        <tr>
+                                            <td class="handover-cell">
+                                                <a href="{{handover.url}}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                                            </td>
+                                            <td>{{ handover.note }}</td>
+                                            <td>{{handover.handoverType.id}}:{{handover.handoverType.label}}</td>
+                                            <td class="handover-cell"><a href="{{handover.url}}" target="_blank">{{ handover.url }}</a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+ 
                     </td>
                 </tr>
             {% endfor %}

@@ -39,8 +39,11 @@
         $(".target-icon").removeClass("active");
         $(this).addClass("active");
 
-        // set result-selection-all target
+        // set result-selection-all as default and set its target
         $("#result-option-all").attr("value", dataTarget);
+        $("#result-option-all").prop("checked", true);
+        $(".result-selection").removeClass("active");
+        $("#result-selection-all").addClass("active");
 
         // call function to update result-selection-complex options
         updateOptions($(this));

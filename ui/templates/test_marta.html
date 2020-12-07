@@ -96,15 +96,15 @@
       </form>
       <div id="main">
         {% if records and not homepage %}
-          {% if resultOption == "individual" %}
+            {% if resultOption == "individual" %}
               {% include "result-individual.html" %}
             {% elif resultOption == "sample" %}
               {% include "result-sample.html" %}
             {% elif resultOption == "variant" %}
               {% include "result-variant.html" %}
-            {% else %}
-              <p>No results. Try again, please.</p>
           {% endif %}
+        {% elif not records and not homepage%}
+          <p class="no-results">No results. Try again, please.</p>
         {% else %}
           {% include "result-homepage.html" %}
         {% endif %}

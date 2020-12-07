@@ -47,71 +47,48 @@
                     <td>{{ record.aminoacid_changes|default("-",true)|join(", ") }}</td>
                     <td>{{ record.ontologies_used|default("-",true)|join(", ") }}</td>
                     <td class="hidden">
-                        <h1><i class="fas fa-times close-button"></i>{{ record.variant_id|default("-",true) }}</h1>
+                        <h1><i class="fas fa-times close-button"></i>Variant {{ record.variant_id|default("-",true) }}</h1>
                         <section>
-                            <h2>Medications</h2>
+                            <h2>Dataset Response</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>name</th>
-                                            <th>dosage</th>
+                                            <th>datasetId</th>
+                                            <th>exists</th>
+                                            <th>matchingSampleCount</th>
+                                            <th>note</th>
                                             <th>frequency</th>
-                                            <th>start</th>
-                                            <th>end</th>
+                                            <th>handovers</th>
+                                            <th>externalUrl</th>
+                                            <th>callCount</th>
+                                            <th>sampleCount</th>
+                                            <th>variantCount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for dataset in record.dataset_response.parsed %}
                                         <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
+                                            <td>{{ dataset.datasetId }}</td>
+                                            <td>{{ dataset.exists }}</td>
+                                            <td>{{ dataset.info.matchingSampleCount }}</td>
+                                            <td>{{ dataset.note }}</td>
+                                            <td>{{ "%.4f"|format(dataset.frequency) }}</td>
+                                            <td class="handover-cell no-wrap">
+                                                {% for handover in dataset.handovers%}
+                                                    <a href="{{handover.url}}" title="{{handover.handoverType.id}}:{{handover.handoverType.label}}" target="_blank">{{ handover.note }} <i class="fas fa-external-link-alt"></i></a>
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ dataset.externalUrl }}</td>
+                                            <td>{{ dataset.callCount }}</td>
+                                            <td>{{ dataset.sampleCount }}</td>
+                                            <td>{{ dataset.variantCount }}</td>
                                         </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </section>
-                        <section>
-                            <h2>Medications</h2>
-                            <div class="extra-info-table-wrapper">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>name</th>
-                                            <th>dosage</th>
-                                            <th>frequency</th>
-                                            <th>start</th>
-                                            <th>end</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
-                                        <tr>
-                                            <td>FOSAMAX</td>    
-                                            <td>70 mg</td>    
-                                            <td>weekly</td>    
-                                            <td>2010-09-01</td>    
-                                            <td>2010-10-01</td>    
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>                    
                     </td>
                 </tr>
             {% endfor %}

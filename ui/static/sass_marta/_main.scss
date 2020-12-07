@@ -265,6 +265,8 @@ body {
             overflow: hidden;
             display: flex;
 
+            p.no-results { padding: 1em; }
+
             #table-wrapper {
                 overflow: scroll;
                 table {
@@ -284,8 +286,8 @@ body {
                         td { font-weight: 300; }
                         &:hover, &.active {
                             background-color: $blue-medium;
-                            td.extra-info-trigger { color: $blue-dark;}
                         }
+                        &.active {td.extra-info-trigger { color: $blue-dark;}}
                     }
 
                     td.hidden {
@@ -336,6 +338,23 @@ body {
                             }
                             tbody tr:hover {
                                  background-color: $blue-medium;
+                            }
+                            td.handover-cell {
+                                a {
+                                    display: block;
+                                    text-decoration: none;
+                                    color: $black;
+                                    margin: 5px 0;
+                                    i {
+                                        color: $grey-dark;
+                                        font-size: 10px;
+                                    }
+                                    &:hover { 
+                                        text-decoration: underline;
+                                        i { color: $blue-dark;}
+                                    }
+                                }
+                                &.no-wrap {white-space: nowrap;}
                             }
                         }
                     }

@@ -1,5 +1,6 @@
 <div id="table-wrapper">
     <table id="main-result">
+        {% if records %}
         <thead>
             <tr>
                 {% for column_name in records[0].keys() %}
@@ -16,5 +17,6 @@
             </tr>
             {% endfor %}
         </tbody>
+        {% endif %}
     </table>
 </div>
