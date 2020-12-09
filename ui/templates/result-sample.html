@@ -49,8 +49,8 @@
                                     <tbody>
                                         {% for sample in record.sample_origins.parsed %}
                                         <tr>
-                                            <td>{{ sample.sampleOriginType }}</td>
-                                            <td>{{ sample.sampleOriginDetail }}</td>
+                                            <td>{{ sample.sampleOriginType|default("-",true) }}</td>
+                                            <td>{{ sample.sampleOriginDetail|default("-",true) }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -70,8 +70,8 @@
                                     <tbody>
                                         {% for sample in record.sample_origins_ontology.parsed %}
                                         <tr>
-                                            <td>{{ sample.sampleOriginType }}</td>
-                                            <td>{{ sample.sampleOriginDetail }}</td>
+                                            <td>{{ sample.sampleOriginType|default("-",true) }}</td>
+                                            <td>{{ sample.sampleOriginDetail|default("-",true) }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

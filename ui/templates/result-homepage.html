@@ -12,7 +12,7 @@
             {% for record in records%}
             <tr>
                 {% for column_value in record.values() %}
-                <td>{{ column_value }}</td>
+                <td>{{ column_value|default("-",true) }}</td>
                 {% endfor %}
             </tr>
             {% endfor %}

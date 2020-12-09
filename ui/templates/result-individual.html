@@ -55,11 +55,11 @@
                                     <tbody>
                                         {% for medication in record.medications.parsed %}
                                             <tr>
-                                                <td>{{ medication.name }}</td>    
-                                                <td>{{ medication.dosage }}</td>    
-                                                <td>{{ medication.frequency }}</td>    
-                                                <td>{{ medication.start }}</td>    
-                                                <td>{{ medication.end }}</td>    
+                                                <td>{{ medication.name|default("-",true) }}</td>    
+                                                <td>{{ medication.dosage|default("-",true) }}</td>    
+                                                <td>{{ medication.frequency|default("-",true) }}</td>    
+                                                <td>{{ medication.start|default("-",true) }}</td>    
+                                                <td>{{ medication.end|default("-",true) }}</td>    
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -79,8 +79,8 @@
                                     <tbody>
                                         {% for procedure in record.procedures.parsed %}
                                         <tr>
-                                            <td>{{ procedure.type }}</td>    
-                                            <td>{{ procedure.date }}</td>    
+                                            <td>{{ procedure.type|default("-",true) }}</td>    
+                                            <td>{{ procedure.date|default("-",true) }}</td>    
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -103,11 +103,11 @@
                                     <tbody>
                                         {% for pedigree in record.pedigrees.parsed %}
                                         <tr>
-                                            <td>{{ pedigree.pedigreeId }}</td>
-                                            <td>{{ pedigree.numSubjects }}</td>
-                                            <td>{{ pedigree.pedigreeRole }}</td>
-                                            <td>{{ pedigree.affectedStatus }}</td>
-                                            <td>{{ pedigree.pedigreeDisease }}</td>
+                                            <td>{{ pedigree.pedigreeId|default("-",true) }}</td>
+                                            <td>{{ pedigree.numSubjects|default("-",true) }}</td>
+                                            <td>{{ pedigree.pedigreeRole|default("-",true) }}</td>
+                                            <td>{{ pedigree.affectedStatus|default("-",true) }}</td>
+                                            <td>{{ pedigree.pedigreeDisease|default("-",true) }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -132,13 +132,13 @@
                                     <tbody>
                                         {% for disease in record.diseases.parsed %}
                                         <tr>
-                                            <td>{{ disease.diseaseId }}</td>
-                                            <td>{{ disease.stage }}</td>
-                                            <td>{{ disease.severity }}</td>
-                                            <td>{{ disease.onsetType }}</td>
-                                            <td>{{ disease.ageOfOnset }}</td>
-                                            <td>{{ disease.dateOfOnset }}</td>
-                                            <td>{{ disease.familyHistory }}</td>
+                                            <td>{{ disease.diseaseId|default("-",true) }}</td>
+                                            <td>{{ disease.stage|default("-",true) }}</td>
+                                            <td>{{ disease.severity|default("-",true) }}</td>
+                                            <td>{{ disease.onsetType|default("-",true) }}</td>
+                                            <td>{{ disease.ageOfOnset|default("-",true) }}</td>
+                                            <td>{{ disease.dateOfOnset|default("-",true) }}</td>
+                                            <td>{{ disease.familyHistory|default("-",true) }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -161,11 +161,11 @@
                                     <tbody>
                                         {% for feature in record.phenotypic_features.parsed %}
                                         <tr>
-                                            <td>{{ feature.phenotypeId }}</td>
-                                            <td>{{ feature.severity }}</td>
-                                            <td>{{ feature.onsetType }}</td>
-                                            <td>{{ feature.ageOfOnset }}</td>
-                                            <td>{{ feature.dateOfOnset }}</td>
+                                            <td>{{ feature.phenotypeId|default("-",true) }}</td>
+                                            <td>{{ feature.severity|default("-",true) }}</td>
+                                            <td>{{ feature.onsetType|default("-",true) }}</td>
+                                            <td>{{ feature.ageOfOnset|default("-",true) }}</td>
+                                            <td>{{ feature.dateOfOnset|default("-",true) }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -190,7 +190,7 @@
                                             <td class="handover-cell">
                                                 <a href="{{handover.url}}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
                                             </td>
-                                            <td>{{ handover.note }}</td>
+                                            <td>{{ handover.note|default("-",true) }}</td>
                                             <td>{{handover.handoverType.id}}:{{handover.handoverType.label}}</td>
                                             <td class="handover-cell"><a href="{{handover.url}}" target="_blank">{{ handover.url }}</a></td>
                                         </tr>
