@@ -276,6 +276,11 @@ body {
                         padding: 10px 15px;
                         border-bottom: 1px solid $blue-light;
                         border-right: 1px solid $blue-light;
+                        span {
+                            font-weight: 300;
+                            font-size: 90%;
+                            margin-left: 2px;
+                        }
                     }
     
                     thead {
