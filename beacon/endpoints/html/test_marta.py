@@ -90,15 +90,6 @@ async def handler_get(request):
             'targetId': '',
             'resultOption': 'individual',
             'homepage': True,
-        # 'request': request,
-        # 'session': session,
-        # 'assemblyIDs': await db.fetch_assemblyids(),
-        # 'datasets': datasets, #db.fetch_datasets_access(datasets=datasets),
-        # 'form': {},
-        # 'selected_datasets': set(),
-        # 'filters': set(),
-        # 'beacon_response': None,
-        # 'cookies': request.cookies,
     }
 
 
@@ -186,7 +177,6 @@ async def handler_post(request):
     final_datasets = allowed_datasets
     LOG.debug('Requested Datasets: %s', qparams_db.datasets)
     if qparams_db.datasets:
-        print("hey im inside")
         final_datasets = [dataset for dataset in qparams_db.datasets if dataset in allowed_datasets]
     LOG.debug('Final Datasets: %s', final_datasets)
     if not final_datasets:
