@@ -70,11 +70,12 @@ class Parameters(RequestParameters):
 async def handler_get(request):
     LOG.info('Running a viral GET request')
 
-    # same as index
-    # session = await get_session(request)
-    # access_token = session.get('access_token')
-    # datasets, authenticated = await resolve_token(access_token, [])
-    # LOG.debug('Datasets: %s', datasets)
+    session = await get_session(request)
+    access_token = session.get('access_token')
+    LOG.debug('Access Token: %s', access_token)
+    datasets_all = set( [name async for _,_,name in db.fetch_datasets_access()] )
+    allowed_datasets, authenticated = await resolve_token(access_token, datasets_all)
+    LOG.debug('Allowed Datasets: %s', allowed_datasets)
 
     # Fetch datasets info
     records = [r async for r in db.fetch_datasets_metadata()]
@@ -107,11 +108,12 @@ proxy = Parameters()
 async def handler_post(request):
     LOG.info('Running a viral POST request')
 
-    # same as index
-    # session = await get_session(request)
-    # access_token = session.get('access_token')
-    # allowedDatasets, authenticated = await resolve_token(access_token, [])
-    # LOG.debug('Allowed Datasets: %s', allowedDatasets)
+    session = await get_session(request)
+    access_token = session.get('access_token')
+    LOG.debug('Access Token: %s', access_token)
+    datasets_all = set( [name async for _,_,name in db.fetch_datasets_access()] )
+    allowed_datasets, authenticated = await resolve_token(access_token, datasets_all)
+    LOG.debug('Allowed Datasets: %s', allowed_datasets)
 
     # parameters
     qparams_raw = {}
@@ -180,8 +182,28 @@ async def handler_post(request):
     LOG.debug(parameters)
     qparams = collections.namedtuple('test_marta', parameters.keys())(*parameters.values())
 
+    # Comparing requested datasets to allowed datasets
+    final_datasets = allowed_datasets
+    LOG.debug('Requested Datasets: %s', qparams_db.datasets)
+    if qparams_db.datasets:
+        print("hey im inside")
+        final_datasets = [dataset for dataset in qparams_db.datasets if dataset in allowed_datasets]
+    LOG.debug('Final Datasets: %s', final_datasets)
+    if not final_datasets:
+        LOG.debug("User not allowed")
+        return {
+            'records': [],
+            'variantQuery': qparams_raw.get('variantQuery',''),
+            'datasets': qparams_raw.get('datasets',''),
+            'filters': qparams_raw.get('filters',''),
+            'targetInstance': qparams_raw.get('targetInstance','individual'),
+            'targetId': qparams_raw.get('targetId',''),
+            'resultOption': qparams_raw.get('resultOption','individual'),
+            'homepage': False
+        }
+
     # DB call
-    response = _fetch_results(qparams_db.resultOption, qparams_db.targetInstance, qparams, None, None)
+    response = _fetch_results(qparams_db.resultOption, qparams_db.targetInstance, qparams, final_datasets, None)
     LOG.debug("Response:")
     LOG.debug(response)
 
