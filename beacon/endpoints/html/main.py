@@ -66,7 +66,7 @@ class Parameters(RequestParameters):
     resultOption = Field(required=False)
 
 
-@template('test_marta.html')
+@template('index.html')
 async def handler_get(request):
     LOG.info('Running a viral GET request')
 
@@ -90,12 +90,14 @@ async def handler_get(request):
             'targetId': '',
             'resultOption': 'individual',
             'homepage': True,
+            'session': session,
+            'request': request,
     }
 
 
 proxy = Parameters()
 
-@template('test_marta.html')
+@template('index.html')
 async def handler_post(request):
     LOG.info('Running a viral POST request')
 
@@ -127,7 +129,9 @@ async def handler_post(request):
             'resultOption': 'individual',
             'errors': str(bad),
             'records': [],
-            'homepage': False
+            'homepage': False,
+            'session': session,
+            'request': request,
         }
 
     # parsing the variantQuery
@@ -171,7 +175,7 @@ async def handler_post(request):
     }
     LOG.debug("Parameters:")
     LOG.debug(parameters)
-    qparams = collections.namedtuple('test_marta', parameters.keys())(*parameters.values())
+    qparams = collections.namedtuple('qparams_custom', parameters.keys())(*parameters.values())
 
     # Comparing requested datasets to allowed datasets
     final_datasets = allowed_datasets
@@ -189,7 +193,9 @@ async def handler_post(request):
             'targetInstance': qparams_raw.get('targetInstance','individual'),
             'targetId': qparams_raw.get('targetId',''),
             'resultOption': qparams_raw.get('resultOption','individual'),
-            'homepage': False
+            'homepage': False,
+            'session': session,
+            'request': request,
         }
 
     # DB call
@@ -207,7 +213,9 @@ async def handler_post(request):
             'targetInstance': qparams_raw.get('targetInstance','individual'),
             'targetId': qparams_raw.get('targetId',''),
             'resultOption': qparams_raw.get('resultOption','individual'),
-            'homepage': False
+            'homepage': False,
+            'session': session,
+            'request': request,
         }
 
     records = [row async for row in response]
@@ -220,5 +228,7 @@ async def handler_post(request):
         'targetInstance': qparams_raw.get('targetInstance',''),
         'targetId': qparams_raw.get('targetId',''),
         'resultOption': qparams_raw.get('resultOption',''),
-        'homepage': False
+        'homepage': False,
+        'session': session,
+        'request': request,
     }

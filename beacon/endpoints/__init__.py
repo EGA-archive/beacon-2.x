@@ -53,10 +53,10 @@ routes = [
 
 
     ## HTML UI
-    web.get('/'       , html.handlers.index  , name='home'   ),
+    web.get('/examples', html.handlers.examples  , name='examples'),
     web.get('/privacy', html.handlers.privacy, name='privacy'),
-    web.get('/test', html.test_marta.handler_get),
-    web.post('/test', html.test_marta.handler_post, name='test_marta'),
+    web.get('/', html.main.handler_get),
+    web.post('/', html.main.handler_post, name='main'),
 
     # Auth endpoints
     web.get('/login'  , html.auth.login      , name='login'  ),

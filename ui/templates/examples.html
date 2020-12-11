@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width, shrink-to-fit=no"/>
+    <title>{{ conf.beacon_name }}</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+	  integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	  crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="//necolas.github.io/normalize.css/latest/normalize.css">
+    <link rel="stylesheet" href="{{ static('css/style.css') }}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> <!-- font-family: 'Open Sans', sans-serif; -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet"> <!-- font-family: 'Roboto Mono', monospace; -->
+        
+    <link rel="icon" href="//ega-archive.org/favicon.ico" />
+
+    <style>
+      #info main > section {display:flex; flex-flow:column nowrap; }
+      #info main > section > a {display:block; }
+      #info main > section > a::before {content:'\261E'; display:inline-block; margin-right:1ex;}
+    </style>
+
+  </head>
+  <body id="{% if beacon_response %}response{% else %}info{% endif %}">
+	
+    {% include 'header.html' %}
+
+    <main>
+
+      <h1>Beacon v2 examples</h1>
+
+      <h2>Listings</h2>
+      <section>
+	<a href="/api/biosamples">Biosamples</a>
+	<a href="/api/biosamples/SAMN03283350">Biosample SAMN03283350</a>
+	<a href="/api/biosamples/SAMN03283350/individuals">Individuals of biosample SAMN03283350</a>
+	<a href="/api/biosamples/SAMN03283350/g_variants">Variants of biosample SAMN03283350</a>
+	<a href="/api/individuals">Individuals</a>
+	<a href="/api/individuals/NA24631">Individual NA24631</a>
+	<a href="/api/individuals/NA24631/biosamples">Biosamples of individual NA24631</a>
+	<a href="/api/individuals/NA24631/g_variants">Variants of individual NA24631</a>
+	<a href="/api/g_variants">Variants</a>
+	<a href="/api/g_variants/1325">variant 1325</a>
+	<a href="/api/g_variants/1325/biosamples">Biosamples of variant 1325</a>
+	<a href="/api/g_variants/1325/individuals">Individuals of variant 1325</a>
+      </section>
+
+      <h2>Other formats</h2>
+      <section>
+	<a href="/api/biosamples/SAMN03283350?requestedSchema=ga4gh-phenopacket-biosample-v1.0">Biosample SAMN03283350 in phenopacket format</a>
+	<a href="/api/individuals/NA24631?requestedSchema=ga4gh-phenopacket-individual-v1.0">Individual NA24631 in phenopacket format</a>
+	<a href="/api/g_variants/1325?requestedSchema=ga4gh-phenopacket-variant-v1.0&requestedAnnotationSchema=ga4gh-phenopacket-variant-annotation-v1.0">Variant 1325 in phenopacket format</a>
+	<a href="/api/g_variants/1325?requestedSchema=ga4gh-variant-representation-v1.1">Variant 1325 in VR format</a>
+      </section>
+
+      <h2>Querying</h2>
+      <section>
+	<a href="/api/g_variants?assemblyId=GRCh37.p1&referenceName=MT&referenceBases=T&alternateBases=C&start=150&includeDatasetResponses=ALL">SNP query</a>
+	<a href="/api/biosamples?assemblyId=GRCh37.p1&referenceName=MT&referenceBases=T&alternateBases=C&start=150">Biosamples with this SNP</a>
+	<a href="/api/individuals?assemblyId=GRCh37.p1&referenceName=MT&referenceBases=T&alternateBases=C&start=150">Individuals with this SNP</a>
+	<a href="/api/g_variants?assemblyId=GRCh37.p1&referenceName=MT&start=1&end=200">Region query [1-200]</a>
+	<a href="/api/g_variants?assemblyId=GRCh37.p1&referenceName=21&start=42809489&end=42809491">Structural variant - exact match [GRCh37.p1 chr21 42809489-42809491]</a>
+	<a href="/api/g_variants?assemblyId=GRCh37.p1&referenceName=21&start=42809489,42809490&end=42809490,42809491&variantType=DEL">Structural variant - fuzzy match (start in [42809489,4280949] and end in [42809490,42809491])</a>
+      </section>
+
+      <h2>Permissions</h2>
+      <section>
+        <a href="/api/g_variants?start=9411318&end=9411338&assemblyId=grch37.p1&referenceName=21">User queries public datasets: returns 2 rows for any user</a>
+        <a href="/api/g_variants?start=9411318&end=9411338&assemblyId=grch37.p1&referenceName=21&datasetIds=GiaB,dataset-registered,dataset-controlled">User queries <b>all</b> datasets: unauthenticated user returns 2 rows, user <code>john</code> 6 rows, <code>jane</code> 4 rows</a>
+        <!--<a href="/api/g_variants?start=9411318&end=9411338&assemblyId=grch37.p1&referenceName=21&datasetIds=dataset-registered">Anonymous user queries registered dataset: FIXME</a>-->
+      </section>
+
+      <h2>Filters</h2>
+      <section>
+	<a href="/api/individuals?filters=NCIT:C37967">Individuals by phenotypic feature (Hypercholesterolemia) (1 result)</a>
+	<a href="/api/individuals?filters=NCIT:C27083,PATO:0000383">Individuals by phenotypic feature (blood clot) and sex (female) (no results)</a>
+	<a href="/api/individuals?filters=NCIT:C27083,PATO:0000384">Individuals by phenotypic feature (blood clot) and sex (male) (1 result)</a>
+	<a href="/api/individuals?filters=PATO:0000384">Individuals by sex=male (2 results)</a>
+	<a href="/api/individuals?filters=PATO:0000383">Individuals by sex=female (1 result)</a>
+	<a href="/api/biosamples?filters=BTO:0000089">Biosamples by origin (blood) (3 results)</a>
+	<a href="/api/biosamples?filters=BTO:0000089,NCIT:C37967">Biosamples by origin (blood) <i>and</i> individual phenotypic feature (Hypercholesterolemia) (1 result)</a>
+	<a href="/api/g_variants?filters=NCIT:C37967">Variants of individuals with phenotypic feature (Hypercholesterolemia)</a>
+	<a href="/api/individuals?filters=custom.pedigree.id:1">Individuals by pedigree Id</a>
+      </section>
+
+      <h2>Info</h2>
+      <section>
+	<a href="/api/info">Beacon Info</a>
+	<a href="/api/info?requestedSchema=ga4gh-service-info-v1.0">Beacon Info using GA4GH Service-info schema</a>
+	<a href="/api/service-info">GA4GH Service-info</a>
+	<a href="/api/info?model=ga4gh-service-info-v1.0">GA4GH service-info (alternative)</a>
+      </section>
+
+      <h2>Other endpoints</h2>
+      <section>
+	<a href="/api/datasets">Beacon Datasets</a>
+	<a href="/api/filtering_terms">Beacon Filtering Terms</a>
+      </section>
+
+      {% if session.user %}
+      <hr/>
+      <h1>Beacon v2 authentication token</h1>
+      <h2>Hi, {{ session.user.name }}</h2>
+      <p>Here is your access token:</p>
+      <pre>{% for i, letter in enumerate(session.access_token, start=1) %}{% if i % 80 == 0 %}
+{% endif %}{{ letter }}{% endfor %}</pre>
+      <p>Keep it safe, it is just a temporary page to test the API</p>
+      <p>Use it like:</p>
+      <code>curl {{request.url}}api -H 'Authorization: Bearer {{ session.access_token}}'</code>
+
+      {% endif %}
+
+    </main>
+
+    {% include 'footer.html' %}
+
+  </body>
+</html>

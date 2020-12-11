@@ -120,4 +120,4 @@ venv.bak/
 .idea/
 
 # SASS
-ui/static/sass_marta/.sass-cache
+ui/static/sass_main/.sass-cache

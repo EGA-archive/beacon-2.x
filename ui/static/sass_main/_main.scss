@@ -55,10 +55,15 @@ body {
 
             &:hover {background-color: $blue-medium;}
 
-            p {
+            a {
                 position: absolute;
                 top: 50%; left: 50%;
                 transform: translate(-50%, -50%);
+                text-decoration: none;
+                color: $black;
+                padding: 1em 0;
+                width: 100%;
+                text-align: center;
             }
 
         }

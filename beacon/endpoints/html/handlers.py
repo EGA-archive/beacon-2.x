@@ -9,8 +9,8 @@ from ...utils import db, resolve_token, middlewares
 
 LOG = logging.getLogger(__name__)
 
-@template('index.html')
-async def index(request):
+@template('examples.html')
+async def examples(request):
     #csrf_token = await generate_token(request)
 
     session = await get_session(request)
