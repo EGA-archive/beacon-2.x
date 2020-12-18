@@ -44,8 +44,8 @@ services:
       - beacon-priv
       - pub
     working_dir: '/beacon'
-    entrypoint: ['python','-m','beacon']
-    # entrypoint: ['/bin/sleep','100000000']
+    # entrypoint: ['python','-m','beacon']
+    entrypoint: ['/bin/sleep','100000000']
 
   ###########################################
   # Dummy Permissions server

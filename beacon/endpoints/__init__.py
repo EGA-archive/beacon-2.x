@@ -56,6 +56,8 @@ routes = [
     web.get('/examples', html.handlers.examples  , name='examples'),
     web.get('/privacy', html.handlers.privacy, name='privacy'),
     web.get('/', html.main.handler_get),
+    web.get('/datasets', html.main.handler_datasets_get, name='datasets'),
+    web.get('/filtering_terms', html.main.handler_filtering_terms_get, name='filtering_terms'),
     web.post('/', html.main.handler_post, name='main'),
 
     # Auth endpoints

@@ -37,12 +37,27 @@ body {
                 padding: 3px 10px;
                 // &:hover {background-color: $blue-medium;}
             }
-            h1 {
+            a.title {
                 margin-left: 5px;
+                margin-right: 20px;
                 font-size: 16px;
                 letter-spacing: 0.5px;
+                color: $black;
+                text-decoration: none;
+            }
+            a.link  {
+                padding: 0 1em;
+                text-decoration: none;
+                color: $blue-dark;
+                // margin-bottom: -1px;
+                cursor: pointer;
+                &:hover, &.active {
+                    color: darken($blue-dark, 10%);
+                    text-decoration: underline;
+                }
             }
         }
+
 
         #header-login {
             border: 1px solid $blue-dark;
@@ -274,6 +289,7 @@ body {
 
             #table-wrapper {
                 overflow: scroll;
+                width: 100%;
                 table {
                     width: 100%;
                     // font-family: 'IBM Plex Mono', monospace;

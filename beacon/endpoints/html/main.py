@@ -79,7 +79,6 @@ async def handler_get(request):
 
     # Fetch datasets info
     records = [r async for r in db.fetch_datasets_metadata()]
-    types = [str(type(x)) for x in records[1].values()]
 
     return {
             'records': records,
@@ -94,6 +93,61 @@ async def handler_get(request):
             'request': request,
     }
 
+@template('index.html')
+async def handler_datasets_get(request):
+    LOG.info('Running a viral GET request')
+
+    session = await get_session(request)
+    access_token = session.get('access_token')
+    LOG.debug('Access Token: %s', access_token)
+    datasets_all = set( [name async for _,_,name in db.fetch_datasets_access()] )
+    allowed_datasets, authenticated = await resolve_token(access_token, datasets_all)
+    LOG.debug('Allowed Datasets: %s', allowed_datasets)
+
+    # Fetch datasets info
+    records = [r async for r in db.fetch_datasets_metadata()]
+
+    return {
+            'records': records,
+            'variantQuery': '',
+            'datasets': '',
+            'filters': '',
+            'targetInstance': 'individual',
+            'targetId': '',
+            'resultOption': 'individual',
+            'homepage': True,
+            'session': session,
+            'request': request,
+            'datasets_page': True
+    }
+
+@template('index.html')
+async def handler_filtering_terms_get(request):
+    LOG.info('Running a viral GET request')
+
+    session = await get_session(request)
+    access_token = session.get('access_token')
+    LOG.debug('Access Token: %s', access_token)
+    datasets_all = set( [name async for _,_,name in db.fetch_datasets_access()] )
+    allowed_datasets, authenticated = await resolve_token(access_token, datasets_all)
+    LOG.debug('Allowed Datasets: %s', allowed_datasets)
+
+    # Fetch filtering terms info
+    records = [r async for r in db.fetch_filtering_terms()]
+
+    return {
+            'records': records,
+            'variantQuery': '',
+            'datasets': '',
+            'filters': '',
+            'targetInstance': 'individual',
+            'targetId': '',
+            'resultOption': 'individual',
+            'homepage': True,
+            'session': session,
+            'request': request,
+            'filtering_terms_page': True
+    }
 
 proxy = Parameters()
 

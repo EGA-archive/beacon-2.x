@@ -34,7 +34,9 @@
     <header>
       <div id="header-logo">
         <img src="//beacon-project.io/assets/img/site-specific/site-logo-topleft.png" alt="Beacon Logo">
-        <h1>Beacon Test Instance</h1>
+        <a href="{{ url('main') }}" class="title">Beacon Test Instance</a>
+        <a href="{{ url('datasets') }}" class="link {% if datasets_page %}active{% endif %}">Datasets</a>
+        <a href="{{ url('filtering_terms') }}" class="link {% if filtering_terms_page %}active{% endif %}">Filtering Terms</a>
       </div>
       <div id="header-login">
         {% if session.user %}
@@ -49,9 +51,9 @@
         <section id="target-selection">
             <input id="target-instance" type="hidden" name="targetInstance" value="">
 
-            <div class="target-icon {% if targetInstance == 'sample' %}active{% endif %}" data-target="sample"><i class="fas fa-vial"></i></div>
-            <div class="target-icon {% if targetInstance == 'individual' %}active{% endif %}" data-target="individual"><i class="fas fa-male"></i></div>
-            <div class="target-icon {% if targetInstance == 'variant' %}active{% endif %}" data-target="variant"><i class="far fa-dot-circle"></i></div>
+            <div class="target-icon {% if targetInstance == 'sample' %}active{% endif %}" data-target="sample" title="Biosample"><i class="fas fa-vial"></i></div>
+            <div class="target-icon {% if targetInstance == 'individual' %}active{% endif %}" data-target="individual" title="Individual"><i class="fas fa-male"></i></div>
+            <div class="target-icon {% if targetInstance == 'variant' %}active{% endif %}" data-target="variant" title="Variant"><i class="far fa-dot-circle"></i></div>
 
             <!-- Empty divs to show more targets are expected in the future -->
             <div class="target-icon empty"></div>
