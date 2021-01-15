@@ -2,6 +2,7 @@ import logging
 import re
 import collections
 
+from aiohttp.web import json_response
 from aiohttp_jinja2 import template
 from aiohttp_session import get_session
 from aiohttp_csrf import generate_token
@@ -331,3 +332,32 @@ async def handler_post(request):
         'allowedDatasets': allowed_datasets,
         'allDatasets': datasets_all
     }
+
+
+##########################################
+# AJAX suggestions / translations
+##########################################
+
+class Suggestions(RequestParameters):
+    term = Field(required=True)
+    limit = IntegerField(min_value=0) # limit=None. # default=_AUTOCOMPLETE_LIMIT)
+
+suggestions_proxy = Suggestions()
+
+async def suggestions(request):
+
+    qparams_raw, qparams_db = await suggestions_proxy.fetch(request)
+    LOG.debug("Original Query Parameters: %s", qparams_raw)
+
+    if not qparams_db.term:
+        return json_response([])
+
+    # it's ok, there are not so many
+    translations = list([ { 'label': f"{r['ontology']}:{r['term']} {r['meaning']}",
+                            'ontology': f"{r['ontology']}:{r['term']}",
+                            'meaning': r['meaning'],
+                            }
+                          async for r
+                          in db.fetch_ontologies(qparams_db.term, qparams_db.limit)])
+    
+    return json_response(translations)

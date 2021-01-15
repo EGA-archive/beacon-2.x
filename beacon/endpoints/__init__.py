@@ -60,6 +60,9 @@ routes = [
     web.get('/filtering_terms', html.main.handler_filtering_terms_get, name='filtering_terms'),
     web.post('/', html.main.handler_post, name='main'),
 
+    # AJAX calls: Alias autocomplete and motifs
+    web.post('/ui/ontologies_suggestions', html.main.suggestions),
+
     # Auth endpoints
     web.get('/login'  , html.auth.login      , name='login'  ),
     web.get('/logout' , html.auth.logout     , name='logout' ),

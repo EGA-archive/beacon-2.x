@@ -137,7 +137,7 @@
         </select>
           
           <p>Ontologies</p>
-          <input type="text" name="filters" value="{% if filters %}{{ filters }}{% endif %}">
+          <input type="text" name="filters" value="{% if filters %}{{ filters }}{% endif %}" id="ontologies-filter">
         </section>
         <section id="search-button">
           <input type="submit" value="Search"/>
@@ -178,6 +178,7 @@
 
     <!-- Custom -->
     <script src="{{ static('js/main.js') }}"></script>
+    <script src="{{ static('js/ontologies_autocomplete.js') }}"></script>
     <!-- End Custom -->
 
 
