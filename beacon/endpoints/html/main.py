@@ -58,12 +58,24 @@ class Parameters(RequestParameters):
     # alternateBases = Field(required=False)
     assemblyId = Field(required=False)  # default="grch37.p1"
 
-    datasets = ListField(items=Field(), trim=True, required=False)
+    datasets = MultipleField(name="datasets")
     filters = ListField(items=Field(), trim=True, required=False)
 
     targetInstance = Field(required=False)
     targetId = Field(required=False)
     resultOption = Field(required=False)
+
+    variantOption = Field(required=False)
+    chromosome = Field(required=False)
+    variantPosOption = Field(required=False)
+    start = Field(required=False)
+    end = Field(required=False)
+    startMin = Field(required=False)
+    startMax = Field(required=False)
+    endMin = Field(required=False)
+    endMax = Field(required=False)
+    reference = Field(required=False)
+    alternate = Field(required=False)
 
 
 @template('index.html')
@@ -91,6 +103,8 @@ async def handler_get(request):
             'homepage': True,
             'session': session,
             'request': request,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all,
     }
 
 @template('index.html')
@@ -118,7 +132,9 @@ async def handler_datasets_get(request):
             'homepage': True,
             'session': session,
             'request': request,
-            'datasets_page': True
+            'datasets_page': True,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all
     }
 
 @template('index.html')
@@ -146,7 +162,9 @@ async def handler_filtering_terms_get(request):
             'homepage': True,
             'session': session,
             'request': request,
-            'filtering_terms_page': True
+            'filtering_terms_page': True,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all
     }
 
 proxy = Parameters()
@@ -186,35 +204,56 @@ async def handler_post(request):
             'homepage': False,
             'session': session,
             'request': request,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all
         }
 
     # parsing the variantQuery
     chromosome = None
-    position = None
+    start = None
+    end = None
     reference = None
     alternate = None
 
-    if qparams_raw.get('variantQuery'):
-        field = proxy.__fields__.get('variantQuery') # must exist
-        flags = re.I if field.ignore_case else 0
-        m = re.match(field.pattern, qparams_db.variantQuery, flags=flags)
-        assert(m)
-        chromosome = m.group(1)
-        position = int(m.group(2))
-        reference = m.group(3).upper()
-        alternate = m.group(4).upper()
-        LOG.debug("""
-        Chromosome: %s
-        Position: %s
-        Reference: %s
-        Alternate: %s""", 
-        chromosome, position, reference, alternate)
+    if qparams_raw.get("variantOption") == "advanced":
+        if qparams_raw.get("variantPosOption") == "variant-pos-exact":
+            startMin = int(qparams_raw.get("start")) if qparams_raw.get("start") else None
+            endMin = int(qparams_raw.get("end")) if qparams_raw.get("end") else None
+        else:
+            startMin = int(qparams_raw.get("startMin")) if qparams_raw.get("startMin") else None
+            endMin = int(qparams_raw.get("endMin")) if qparams_raw.get("endMin") else None
+
+        startMax = int(qparams_raw.get("startMax")) if qparams_raw.get("startMax") else None
+        endMax = int(qparams_raw.get("endMax")) if qparams_raw.get("endMax") else None
+
+        chromosome = qparams_raw.get("chromosome")
+        start = list(filter(None,[startMin, startMax]))
+        end = list(filter(None,[endMin, endMax]))
+        reference = qparams_raw.get("reference")
+        alternate = qparams_raw.get("alternate")
+    else:
+        if qparams_raw.get('variantQuery'):
+            field = proxy.__fields__.get('variantQuery') # must exist
+            flags = re.I if field.ignore_case else 0
+            m = re.match(field.pattern, qparams_db.variantQuery, flags=flags)
+            assert(m)
+            chromosome = m.group(1)
+            start = [int(m.group(2))]
+            reference = m.group(3).upper()
+            alternate = m.group(4).upper()
+    LOG.debug("""
+    Chromosome: %s
+    Start: %s
+    End: %s
+    Reference: %s
+    Alternate: %s""", 
+    chromosome, start, end, reference, alternate)
 
     # prepare qparams
     parameters = {
         "variantType": None,  # HARDCODED
-        "start": tuple([position]) if position else tuple(),  # two items tuple
-        "end": tuple(),  # two items tuple
+        "start": tuple(start) if start else tuple(),  # two items tuple
+        "end": tuple(end) if end else tuple(),  # two items tuple
         "referenceName": chromosome,
         "referenceBases": reference,
         "alternateBases": alternate,
@@ -250,6 +289,8 @@ async def handler_post(request):
             'homepage': False,
             'session': session,
             'request': request,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all
         }
 
     # DB call
@@ -270,6 +311,8 @@ async def handler_post(request):
             'homepage': False,
             'session': session,
             'request': request,
+            'allowedDatasets': allowed_datasets,
+            'allDatasets': datasets_all
         }
 
     records = [row async for row in response]
@@ -285,4 +328,6 @@ async def handler_post(request):
         'homepage': False,
         'session': session,
         'request': request,
+        'allowedDatasets': allowed_datasets,
+        'allDatasets': datasets_all
     }

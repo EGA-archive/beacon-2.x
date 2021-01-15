@@ -24,6 +24,7 @@
     <!-- End Fonts -->
 
     <!-- Plugins -->
+    <link rel="stylesheet" href="{{ static('css_main/bootstrap-multiselect.css') }}" type="text/css" media="screen" />
     <!-- End Plugins -->
 
     <link rel="icon" href="//beacon-project.io/assets/img/site-specific/site-logo-topleft.png">
@@ -88,13 +89,53 @@
         </section>
         <section id="filters">
           <h1>Filters</h1>
-          <p>Variants</p>
-          <select name="assemblyId">
-            <option value="grch37.p1">grch37.p1</option>
-          </select>
-          <input type="text" name="variantQuery" value="{% if variantQuery %}{{ variantQuery }}{% endif %}">
+          
+          <div id="variant-title">
+            <p>Variant</p>
+            <span class="variant-button active" id="variant-basic-button">basic</span><span class="variant-button" id="variant-advanced-button">advanced</span>
+            <input type="hidden" name="variantOption" id="variant-option" value="basic">
+          </div>
+          <div id="variant-basic" class="variant-option active">
+            <select name="assemblyId">
+              <option value="grch37.p1">grch37.p1</option>
+            </select>
+            <input type="text" name="variantQuery" value="{% if variantQuery %}{{ variantQuery }}{% endif %}">
+          </div>
+          <div id="variant-advanced" class="variant-option">
+            <select name="assemblyId">
+              <option value="grch37.p1">grch37.p1</option>
+            </select>
+            <select title="Chromosome" name="chromosome"><option title="Chromosome 1" value="1"> 1 </option><option title="Chromosome 2" value="2"> 2 </option><option title="Chromosome 3" value="3"> 3 </option><option title="Chromosome 4" value="4"> 4 </option><option title="Chromosome 5" value="5"> 5 </option><option title="Chromosome 6" value="6"> 6 </option><option title="Chromosome 7" value="7"> 7 </option><option title="Chromosome 8" value="8"> 8 </option><option title="Chromosome 9" value="9"> 9 </option><option title="Chromosome 10" value="10"> 10 </option><option title="Chromosome 11" value="11"> 11 </option><option title="Chromosome 12" value="12"> 12 </option><option title="Chromosome 13" value="13"> 13 </option><option title="Chromosome 14" value="14"> 14 </option><option title="Chromosome 15" value="15"> 15 </option><option title="Chromosome 16" value="16"> 16 </option><option title="Chromosome 17" value="17"> 17 </option><option title="Chromosome 18" value="18"> 18 </option><option title="Chromosome 19" value="19"> 19 </option><option title="Chromosome 20" value="20"> 20 </option><option title="Chromosome 21" value="21"> 21 </option><option title="Chromosome 22" value="22"> 22 </option><option title="Chromosome X" value="X"> X </option><option title="Chromosome Y" value="Y"> Y </option><option title="Chromosome MT" value="MT"> MT </option></select>
+            <div id="variant-pos-selection">
+              <input id="variant-exact" type="radio" name="variantPosOption" value="variant-pos-exact" checked> <label for="variant-exact">Exact</label>
+              <input id="variant-range" type="radio" name="variantPosOption" value="variant-pos-range"> <label for="variant-range">Range</label>
+            </div>
+            <div id="variant-pos-exact" class="variant-pos-option active">
+              <input type="number" name="start" value="" placeholder="start">
+              <input type="number" name="end" value="" placeholder="end">
+              <input type="text" name="reference" value="" placeholder="reference">
+              <input type="text" name="alternate" value="" placeholder="alternate">  
+            </div>
+            <div id="variant-pos-range" class="variant-pos-option">
+              <input type="number" name="startMin" value="" placeholder="min start">
+              <input type="number" name="startMax" value="" placeholder="max start">
+              <input type="number" name="endMin" value="" placeholder="min end">
+              <input type="number" name="endMax" value="" placeholder="max end">
+              <input type="text" name="reference" value="" placeholder="reference">
+              <input type="text" name="alternate" value="" placeholder="alternate">
+            </div>
+          </div>
           <p>Datasets</p>
-          <input type="text" name="datasets" value="{% if datasets %}{{ datasets }}{% endif %}">
+          <select id="example-getting-started" multiple="multiple" name="datasets">
+            {% for dataset in allDatasets %}
+              {% if dataset in allowedDatasets %}
+              <option value="{{dataset}}">{{dataset}}</option>
+              {% else %}
+              <option value="{{dataset}}" disabled>{{dataset}}</option>
+              {% endif %}
+            {% endfor %}
+        </select>
+          
           <p>Ontologies</p>
           <input type="text" name="filters" value="{% if filters %}{{ filters }}{% endif %}">
         </section>
@@ -128,12 +169,17 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script>
     <!-- End Jquery -->
 
+    <!-- Bootstrap Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Plugins -->
+    <script type="text/javascript" src="{{ static('js/bootstrap-multiselect.js') }}"></script>
+    <!-- End Plugins -->
+
     <!-- Custom -->
     <script src="{{ static('js/main.js') }}"></script>
     <!-- End Custom -->
 
-    <!-- Plugins -->
-    <!-- End Plugins -->
 
   </body>
 </html>
