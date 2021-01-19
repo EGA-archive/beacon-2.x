@@ -273,7 +273,7 @@ async def handler_post(request):
         "referenceBases": reference,
         "alternateBases": alternate,
         "assemblyId": assembly_id,
-        "filters": set([x.split(" ")[0] for x in qparams_db.filters if x != None]),
+        "filters": set([x.split(" ")[0] for x in qparams_db.filters if x != None]) if qparams_db.filters else None,
         "skip": 0,
         "limit": 10,
         "requestedSchema": [None], # list
