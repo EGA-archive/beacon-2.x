@@ -89,47 +89,56 @@
         </section>
         <section id="filters">
           <h1>Filters</h1>
-          
           <div id="variant-title">
             <p>Variant</p>
-            <span class="variant-button active" id="variant-basic-button">basic</span><span class="variant-button" id="variant-advanced-button">advanced</span>
-            <input type="hidden" name="variantOption" id="variant-option" value="basic">
+            <span class="variant-button {% if variantOption == 'basic' %}active{% endif %}" id="variant-basic-button">basic</span><span class="variant-button {% if variantOption == 'advanced' %}active{% endif %}" id="variant-advanced-button">advanced</span>
+            <input type="hidden" name="variantOption" id="variant-option" value="{% if variantOption %}{{ variantOption }}{% else %}basic{% endif %}">
           </div>
-          <div id="variant-basic" class="variant-option active">
-            <select name="assemblyId">
-              <option value="grch37.p1">grch37.p1</option>
+          <div id="variant-basic" class="variant-option {% if variantOption == 'basic' %}active{% endif %}">
+            <select name="assemblyIdBasic">
+              <option value="">Assembly</option>
+              <option value="grch37.p1" {% if variantOption == 'basic' and qparams and qparams.assemblyIdBasic and qparams.assemblyIdBasic == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
             </select>
-            <input type="text" name="variantQuery" value="{% if variantQuery %}{{ variantQuery }}{% endif %}">
+            <input type="text" name="variantQuery" value="{% if variantOption == 'basic' and variantQuery %}{{ variantQuery }}{% endif %}">
           </div>
-          <div id="variant-advanced" class="variant-option">
-            <select name="assemblyId">
-              <option value="grch37.p1">grch37.p1</option>
+          <div id="variant-advanced" class="variant-option {% if variantOption == 'advanced' %}active{% endif %}">
+            <select name="assemblyIdAdvanced">
+              <option value="">Assembly</option>
+              <option value="grch37.p1" {% if variantOption == 'advanced' and qparams and qparams.assemblyIdAdvanced and qparams.assemblyIdAdvanced == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
             </select>
-            <select title="Chromosome" name="chromosome"><option title="Chromosome 1" value="1"> 1 </option><option title="Chromosome 2" value="2"> 2 </option><option title="Chromosome 3" value="3"> 3 </option><option title="Chromosome 4" value="4"> 4 </option><option title="Chromosome 5" value="5"> 5 </option><option title="Chromosome 6" value="6"> 6 </option><option title="Chromosome 7" value="7"> 7 </option><option title="Chromosome 8" value="8"> 8 </option><option title="Chromosome 9" value="9"> 9 </option><option title="Chromosome 10" value="10"> 10 </option><option title="Chromosome 11" value="11"> 11 </option><option title="Chromosome 12" value="12"> 12 </option><option title="Chromosome 13" value="13"> 13 </option><option title="Chromosome 14" value="14"> 14 </option><option title="Chromosome 15" value="15"> 15 </option><option title="Chromosome 16" value="16"> 16 </option><option title="Chromosome 17" value="17"> 17 </option><option title="Chromosome 18" value="18"> 18 </option><option title="Chromosome 19" value="19"> 19 </option><option title="Chromosome 20" value="20"> 20 </option><option title="Chromosome 21" value="21"> 21 </option><option title="Chromosome 22" value="22"> 22 </option><option title="Chromosome X" value="X"> X </option><option title="Chromosome Y" value="Y"> Y </option><option title="Chromosome MT" value="MT"> MT </option></select>
+            <select title="Chromosome" name="chromosome">
+              <option title="None selected" value="">Chr</option>
+              {% for i in range(1,23) %}
+                <option title="Chromosome {{i}}" value="{{i}}" {% if variantOption == 'advanced' and qparams and qparams.referenceName and qparams.referenceName == '{{i}}' %}selected{% endif %}> {{i}} </option>
+              {% endfor %}
+              <option title="Chromosome X" value="X" {% if variantOption == 'advanced' and qparams and qparams.referenceName and qparams.referenceName == 'X' %}selected{% endif %}> X </option>
+              <option title="Chromosome Y" value="Y" {% if variantOption == 'advanced' and qparams and qparams.referenceName and qparams.referenceName == 'Y' %}selected{% endif %}> Y </option>
+              <option title="Chromosome MT" value="MT" {% if variantOption == 'advanced' and qparams and qparams.referenceName and qparams.referenceName == 'MT' %}selected{% endif %}> MT </option>
+            </select>
             <div id="variant-pos-selection">
-              <input id="variant-exact" type="radio" name="variantPosOption" value="variant-pos-exact" checked> <label for="variant-exact">Exact</label>
-              <input id="variant-range" type="radio" name="variantPosOption" value="variant-pos-range"> <label for="variant-range">Range</label>
+              <input id="variant-exact" type="radio" name="variantPosOption" value="variant-pos-exact" {% if variantPosOption == 'variant-pos-exact' %}checked{% endif %}> <label for="variant-exact">Exact</label>
+              <input id="variant-range" type="radio" name="variantPosOption" value="variant-pos-range" {% if variantPosOption == 'variant-pos-range' %}checked{% endif %}> <label for="variant-range">Range</label>
             </div>
-            <div id="variant-pos-exact" class="variant-pos-option active">
-              <input type="number" name="start" value="" placeholder="start">
-              <input type="number" name="end" value="" placeholder="end">
-              <input type="text" name="reference" value="" placeholder="reference">
-              <input type="text" name="alternate" value="" placeholder="alternate">  
+            <div id="variant-pos-exact" class="variant-pos-option {% if variantPosOption == 'variant-pos-exact' %}active{% endif %}">
+              <input type="number" name="start" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-exact' and qparams %}{{qparams.start[0]}}{% endif %}" placeholder="start">
+              <input type="number" name="end" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-exact' and qparams %}{{qparams.end[0]}}{% endif %}" placeholder="end">
+              <input type="text" name="reference" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-exact' and qparams %}{{qparams.referenceBases}}{% endif %}" placeholder="reference">
+              <input type="text" name="alternate" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-exact' and qparams %}{{qparams.alternateBases}}{% endif %}" placeholder="alternate">  
             </div>
-            <div id="variant-pos-range" class="variant-pos-option">
-              <input type="number" name="startMin" value="" placeholder="min start">
-              <input type="number" name="startMax" value="" placeholder="max start">
-              <input type="number" name="endMin" value="" placeholder="min end">
-              <input type="number" name="endMax" value="" placeholder="max end">
-              <input type="text" name="reference" value="" placeholder="reference">
-              <input type="text" name="alternate" value="" placeholder="alternate">
+            <div id="variant-pos-range" class="variant-pos-option {% if variantPosOption == 'variant-pos-range' %}active{% endif %}">
+              <input type="number" name="startMin" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.start[0]}}{% endif %}" placeholder="min start">
+              <input type="number" name="startMax" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.start[1]}}{% endif %}" placeholder="max start">
+              <input type="number" name="endMin" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.end[0]}}{% endif %}" placeholder="min end">
+              <input type="number" name="endMax" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.end[1]}}{% endif %}" placeholder="max end">
+              <input type="text" name="reference" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.referenceBases}}{% endif %}" placeholder="reference">
+              <input type="text" name="alternate" value="{% if variantOption == 'advanced' and variantPosOption == 'variant-pos-range' and qparams %}{{qparams.alternateBases}}{% endif %}" placeholder="alternate">  
             </div>
           </div>
           <p>Datasets</p>
           <select id="example-getting-started" multiple="multiple" name="datasets">
             {% for dataset in allDatasets %}
               {% if dataset in allowedDatasets %}
-              <option value="{{dataset}}">{{dataset}}</option>
+              <option value="{{dataset}}" {% if datasets and dataset in datasets %}selected{% endif %}>{{dataset}}</option>
               {% else %}
               <option value="{{dataset}}" disabled>{{dataset}}</option>
               {% endif %}
@@ -137,10 +146,14 @@
         </select>
           
           <p>Ontologies</p>
-          <input type="text" name="filters" value="{% if filters %}{{ filters }}{% endif %}" id="ontologies-filter">
+          <input type="text" value="" id="ontologies-filter">
+          <input type="hidden" id="filters-hidden" name="filters" value="">
+          <div id="filters-tags">
+          </div>
         </section>
         <section id="search-button">
           <input type="submit" value="Search"/>
+          
         </section>  
       </form>
       <div id="main">

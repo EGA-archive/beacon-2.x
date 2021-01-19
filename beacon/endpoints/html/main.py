@@ -57,7 +57,8 @@ class Parameters(RequestParameters):
     # referenceName = Field(required=False)
     # referenceBases = Field(required=False)
     # alternateBases = Field(required=False)
-    assemblyId = Field(required=False)  # default="grch37.p1"
+    assemblyIdBasic = Field(required=False)  # default="grch37.p1"
+    assemblyIdAdvanced = Field(required=False)  # default="grch37.p1"
 
     datasets = MultipleField(name="datasets")
     filters = ListField(items=Field(), trim=True, required=False)
@@ -106,6 +107,8 @@ async def handler_get(request):
             'request': request,
             'allowedDatasets': allowed_datasets,
             'allDatasets': datasets_all,
+            'variantPosOption': "variant-pos-exact",
+            'variantOption': "basic"
     }
 
 @template('index.html')
@@ -135,7 +138,9 @@ async def handler_datasets_get(request):
             'request': request,
             'datasets_page': True,
             'allowedDatasets': allowed_datasets,
-            'allDatasets': datasets_all
+            'allDatasets': datasets_all,
+            'variantPosOption': "variant-pos-exact",
+            'variantOption': "basic"
     }
 
 @template('index.html')
@@ -165,7 +170,9 @@ async def handler_filtering_terms_get(request):
             'request': request,
             'filtering_terms_page': True,
             'allowedDatasets': allowed_datasets,
-            'allDatasets': datasets_all
+            'allDatasets': datasets_all,
+            'variantPosOption': "variant-pos-exact",
+            'variantOption': "basic"
     }
 
 proxy = Parameters()
@@ -206,7 +213,9 @@ async def handler_post(request):
             'session': session,
             'request': request,
             'allowedDatasets': allowed_datasets,
-            'allDatasets': datasets_all
+            'allDatasets': datasets_all,
+            'variantPosOption': "variant-pos-exact",
+            'variantOption': "basic"
         }
 
     # parsing the variantQuery
@@ -215,8 +224,11 @@ async def handler_post(request):
     end = None
     reference = None
     alternate = None
+    assembly_id = None
 
     if qparams_raw.get("variantOption") == "advanced":
+        assembly_id = qparams_db.assemblyIdAdvanced if qparams_db.assemblyIdAdvanced != "" else None
+
         if qparams_raw.get("variantPosOption") == "variant-pos-exact":
             startMin = int(qparams_raw.get("start")) if qparams_raw.get("start") else None
             endMin = int(qparams_raw.get("end")) if qparams_raw.get("end") else None
@@ -227,12 +239,14 @@ async def handler_post(request):
         startMax = int(qparams_raw.get("startMax")) if qparams_raw.get("startMax") else None
         endMax = int(qparams_raw.get("endMax")) if qparams_raw.get("endMax") else None
 
-        chromosome = qparams_raw.get("chromosome")
+        chromosome = qparams_raw.get("chromosome") if qparams_raw.get("chromosome") != "" else None
         start = list(filter(None,[startMin, startMax]))
         end = list(filter(None,[endMin, endMax]))
-        reference = qparams_raw.get("reference")
-        alternate = qparams_raw.get("alternate")
+        reference = qparams_raw.get("reference") if qparams_raw.get("reference") != "" else None
+        alternate = qparams_raw.get("alternate") if qparams_raw.get("alternate") != "" else None
     else:
+        assembly_id = qparams_db.assemblyIdBasic if qparams_db.assemblyIdBasic != "" else None
+
         if qparams_raw.get('variantQuery'):
             field = proxy.__fields__.get('variantQuery') # must exist
             flags = re.I if field.ignore_case else 0
@@ -291,7 +305,10 @@ async def handler_post(request):
             'session': session,
             'request': request,
             'allowedDatasets': allowed_datasets,
-            'allDatasets': datasets_all
+            'allDatasets': datasets_all,
+            'variantPosOption': qparams_raw.get('variantPosOption','variant-pos-exact'),
+            'variantOption': qparams_raw.get('variantOption','basic'),
+            'qparams': qparams
         }
 
     # DB call
@@ -313,7 +330,10 @@ async def handler_post(request):
             'session': session,
             'request': request,
             'allowedDatasets': allowed_datasets,
-            'allDatasets': datasets_all
+            'allDatasets': datasets_all,
+            'variantPosOption': qparams_raw.get('variantPosOption','variant-pos-exact'),
+            'variantOption': qparams_raw.get('variantOption','basic'),
+            'qparams': qparams
         }
 
     records = [row async for row in response]
@@ -330,7 +350,10 @@ async def handler_post(request):
         'session': session,
         'request': request,
         'allowedDatasets': allowed_datasets,
-        'allDatasets': datasets_all
+        'allDatasets': datasets_all,
+        'variantPosOption': qparams_raw.get('variantPosOption','variant-pos-exact'),
+        'variantOption': qparams_raw.get('variantOption','basic'),
+        'qparams': qparams
     }
 
 

@@ -1,7 +1,10 @@
 (function(){ // scoping
 
     var $ontologiesFilter = $('#ontologies-filter');
+    var $ontologiesFilterHidden = $("#filters-hidden");
+    var $ontologiesTags = $("#filters-tags");
 
+    var selectedOntologies = [];
 
     $ontologiesFilter.autocomplete({
 	minLength: 1
@@ -16,14 +19,20 @@
         //     return false;
 	// }
 	, select: function( event, ui ) {
-	    // console.log(ui);
-            // $start.val(ui.item.start);
-            // $end.val(ui.item.end);
-            // $query.val(ui.item.name);
-            // this.value = ui.item.name;
-            console.log("you clicked ;)");
-            console.log(ui.item.meaning);
-            console.log(ui.item.ontology);
+            // activate div
+            if (!$ontologiesTags.hasClass("active")) {
+                $ontologiesTags.addClass("active");
+            };
+            if (selectedOntologies.indexOf(ui.item.ontology) == -1) {
+                // create tag
+                $ontologiesTags.append("<span data-ontology='"+ui.item.ontology+"' >"+ui.item.label+"<i class='fas fa-times'></i></span>")
+                // add to list
+                selectedOntologies.push(ui.item.ontology);
+                // update hidden input
+                $ontologiesFilterHidden.val(selectedOntologies.join());
+            };
+            // clean input
+            $ontologiesFilter.val("");
             return false;
 	}
 
@@ -31,5 +40,24 @@
 
     $ontologiesFilter.autocomplete("enable");
     $ontologiesFilter.attr('autocomplete','off');
+
+
+    // remove tags
+    $ontologiesTags.on("click", "i", function(){
+        // update list
+        var me = $(this);
+        var ontologyTerm = me.parent().attr("data-ontology");
+        selectedOntologies = jQuery.grep(selectedOntologies, function(value) {
+            return value != ontologyTerm;
+        });
+        // remove tag
+        me.parent().remove();
+        // update hidden input
+        $ontologiesFilterHidden.val(selectedOntologies.join());
+        // removing div if no tags
+        if (selectedOntologies.length === 0) {
+            $ontologiesTags.removeClass("active");
+        }
+    });
 
 })();
