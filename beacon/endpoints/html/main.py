@@ -272,8 +272,8 @@ async def handler_post(request):
         "referenceName": chromosome,
         "referenceBases": reference,
         "alternateBases": alternate,
-        "assemblyId": qparams_db.assemblyId,
-        "filters": qparams_db.filters,
+        "assemblyId": assembly_id,
+        "filters": set([x.split(" ")[0] for x in qparams_db.filters if x != None]),
         "skip": 0,
         "limit": 10,
         "requestedSchema": [None], # list

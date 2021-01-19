@@ -97,14 +97,14 @@
           <div id="variant-basic" class="variant-option {% if variantOption == 'basic' %}active{% endif %}">
             <select name="assemblyIdBasic">
               <option value="">Assembly</option>
-              <option value="grch37.p1" {% if variantOption == 'basic' and qparams and qparams.assemblyIdBasic and qparams.assemblyIdBasic == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
+              <option value="grch37.p1" {% if variantOption == 'basic' and qparams and qparams.assemblyId and qparams.assemblyId == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
             </select>
             <input type="text" name="variantQuery" value="{% if variantOption == 'basic' and variantQuery %}{{ variantQuery }}{% endif %}">
           </div>
           <div id="variant-advanced" class="variant-option {% if variantOption == 'advanced' %}active{% endif %}">
             <select name="assemblyIdAdvanced">
               <option value="">Assembly</option>
-              <option value="grch37.p1" {% if variantOption == 'advanced' and qparams and qparams.assemblyIdAdvanced and qparams.assemblyIdAdvanced == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
+              <option value="grch37.p1" {% if variantOption == 'advanced' and qparams and qparams.assemblyId and qparams.assemblyId == 'grch37.p1' %}selected{% endif %}>grch37.p1</option>
             </select>
             <select title="Chromosome" name="chromosome">
               <option title="None selected" value="">Chr</option>
@@ -147,8 +147,13 @@
           
           <p>Ontologies</p>
           <input type="text" value="" id="ontologies-filter">
-          <input type="hidden" id="filters-hidden" name="filters" value="">
-          <div id="filters-tags">
+          <input type="hidden" id="filters-hidden" name="filters" value="{% if filters %}{{filters}}{% endif %}">
+          <div id="filters-tags" class="{% if filters %}active{% endif %}">
+            {% if filters %}
+            {% for filter in filters.split(",") %}
+            <span data-ontology="{{filter}}" >{{filter}}<i class='fas fa-times'></i></span>
+            {% endfor %}
+            {% endif %}
           </div>
         </section>
         <section id="search-button">
