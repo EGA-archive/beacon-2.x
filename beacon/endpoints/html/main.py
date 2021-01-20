@@ -1,6 +1,7 @@
 import logging
 import re
 import collections
+import json
 
 from aiohttp.web import json_response
 from aiohttp_jinja2 import template
@@ -9,10 +10,10 @@ from aiohttp_csrf import generate_token
 
 from ... import conf
 from ...utils import db, resolve_token, middlewares
-from ...utils.exceptions import BeaconBadRequest
+from ...utils.exceptions import BeaconBadRequest, BeaconBadRequestUI
 
 from ...validation.request import RequestParameters, print_qparams
-from ...validation.fields import RegexField, Field, MultipleField, ListField, IntegerField, FloatField, RangeField, DateField
+from ...validation.fields import RegexField, Field, ChoiceField, MultipleField, ListField, IntegerField, FloatField, RangeField, DateField
 
 
 LOG = logging.getLogger(__name__)
@@ -53,10 +54,7 @@ class Parameters(RequestParameters):
     variantQuery = RegexField(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s*\:\s*(\d+)\s+([ATCGN]+)\s*\>\s*(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$',
                        required=False,
                        ignore_case=True)
-    # variantType = Field(required=False)
-    # referenceName = Field(required=False)
-    # referenceBases = Field(required=False)
-    # alternateBases = Field(required=False)
+
     assemblyIdBasic = Field(required=False)  # default="grch37.p1"
     assemblyIdAdvanced = Field(required=False)  # default="grch37.p1"
 
@@ -78,6 +76,92 @@ class Parameters(RequestParameters):
     endMax = Field(required=False)
     reference = Field(required=False)
     alternate = Field(required=False)
+
+    def correlate(self, req, values):
+
+        if values.variantPosOption == "variant-pos-exact":
+            start = list(filter(None,[values.start]))
+            end = list(filter(None,[values.end]))
+        elif values.variantPosOption == "variant-pos-range":
+            start = list(filter(None,[values.startMin, values.startMax]))
+            end = list(filter(None,[values.endMin, values.endMax]))
+
+        LOG.debug("""
+        VALIDATION
+        Chromosome: %s
+        Start: %s
+        End: %s
+        Reference: %s
+        Alternate: %s
+        Filters: %s
+        VariantQuery: %s
+        AssemblyIdBasic: %s
+        AssemblyIdAdvanced: %s
+        """, 
+        values.chromosome, start, end, values.reference, values.alternate, values.filters, values.variantQuery, values.assemblyIdBasic, values.assemblyIdAdvanced)
+
+        if values.targetId is not None and (
+                len(start) > 0
+                or len(end) > 0
+                or values.filters is not None
+                or values.variantQuery is not None
+                or values.reference is not None
+                or values.alternate is not None
+                or values.assemblyIdBasic is not None
+                or values.assemblyIdAdvanced is not None
+                or values.chromosome is not None):
+            raise BeaconBadRequestUI("No other parameters are accepted when querying by Id")
+        
+        if values.variantOption == "advanced" and (
+                len(start) > 0
+                or len(end) > 0
+                or values.reference is not None
+                or values.alternate is not None
+                or values.assemblyIdAdvanced is not None
+                or values.chromosome is not None) and (
+                len(start) == 0
+                or len(end) == 0
+                or values.reference is None
+                or values.alternate is None
+                or values.assemblyIdAdvanced is None
+                or values.chromosome is None):
+            raise BeaconBadRequestUI("All variant parameters are required")
+
+        if values.variantOption == "basic" and (
+                values.variantQuery is not None
+                or values.assemblyIdBasic is not None) and (
+                values.variantQuery is None
+                or values.assemblyIdBasic is None):
+            raise BeaconBadRequestUI("All variant parameters are required")
+
+        if end is not None and len(end) == 1 and start is None:
+            raise BeaconBadRequestUI("'start' is required if 'end' is provided")
+
+        if values.reference is not None and (values.alternate is None or start is None):
+            raise BeaconBadRequestUI("If 'reference' is provided then 'alternate' and ' start' are required")
+
+        # if (values.reference is not None or values.alternate is not None) and len(end) > 0:
+        #     raise BeaconBadRequestUI("'reference' cannot be combined with 'end'")
+
+        if (start or values.chromosome or values.alternate or end ) \
+                and (values.chromosome is None or values.assemblyIdAdvanced is None):
+            raise BeaconBadRequestUI("'assemblyId' and 'chromosome' are mandatory")
+
+        if values.variantQuery and values.assemblyIdBasic is None:
+            raise BeaconBadRequestUI("'assemblyId' is mandatory")
+
+        if len(start) == 2 and (end is None or len(end) == 1) \
+                or len(end) == 2 and (start is None or len(start) == 1):
+            raise BeaconBadRequestUI("All 'start[0]', 'start[1]', 'end[0]', 'end[1]' are required")
+
+        if len(end) > 0 and end[0] < start[0]:
+            raise BeaconBadRequestUI("'end[0]' must be greater than 'start[0]'")
+
+        if len(start) > 1 and start[0] > start[1]:
+            raise BeaconBadRequestUI("'start[0]' must be smaller than 'start[1]'")
+
+        if len(end) > 1 and end[0] > end[1]:
+            raise BeaconBadRequestUI("'end[0]' must be smaller than 'end[1]'")
 
 
 @template('index.html')
@@ -198,9 +282,11 @@ async def handler_post(request):
         if LOG.isEnabledFor(logging.DEBUG):
             print_qparams(qparams_db, proxy, LOG)
 
-    except BeaconBadRequest as bad:
-        LOG.error('Bad request %s', bad)
+    except BeaconBadRequestUI as bad:
+        LOG.error('Bad request %s', bad.text)
+
         return {
+            'error': bad.text,
             'variantQuery': '',
             'datasets': '',
             'filters': '',

@@ -257,6 +257,10 @@ body {
                 }
                 input[type=text] {
                     width: 80%;
+                    &.variant-bases-input {
+                        margin-right: 5px;
+                        width: 37%;
+                    }
                 }
 
                 #variant-title {
@@ -303,6 +307,7 @@ body {
                         width: 37%;
                     }
                 }
+
                 .multiselect-native-select {
                     margin-right: 20px;
                     .multiselect-selected-text {
@@ -391,7 +396,11 @@ body {
             overflow: hidden;
             display: flex;
 
-            p.no-results { padding: 1em; }
+            p.no-results { 
+                padding: 1em; 
+                span { font-weight: bold;}
+                i { font-size: 12px; margin-right: 5px;}
+            }
 
             #table-wrapper {
                 overflow: scroll;

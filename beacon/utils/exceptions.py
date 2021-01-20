@@ -57,6 +57,25 @@ class BeaconBadRequest(web.HTTPBadRequest):
             headers = None
         super().__init__(text=content, headers=headers)
 
+
+class BeaconBadRequestUI(web.HTTPBadRequest):
+    """Exception returns with 400 code and a custom error message.
+
+    The method is called if one of the required parameters are missing or invalid.
+    Used in conjuction with JSON Schema validator.
+    """
+    api_error = False
+    def __init__(self, error, fields=None, api_error=False):
+        """Return custom bad request exception."""
+        self.api_error = api_error
+        if api_error:
+            content = json.dumps(make_response(400, error, fields=fields))
+            headers = { 'Content-Type': 'application/json' }
+        else:
+            content = error
+            headers = None
+        super().__init__(text=content, headers=headers)
+
 class BeaconUnauthorised(web.HTTPUnauthorized):
     """HTTP Exception returns with 401 code with a custom error message.
 
