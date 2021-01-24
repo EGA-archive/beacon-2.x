@@ -7,11 +7,11 @@
                 <th>Assembly ID</th>
                 <th>Chromosome</th>
                 <th>RefSeq ID</th>
-                <th>Variant Name</th>
                 <th>Reference</th>
                 <th>Alternate</th>
                 <th>Start</th>
                 <th>End</th>
+                <th>Variant Alternative IDs</th>
                 <th>Variant Type</th>
                 <th>Genomic HGVS ID</th>
                 <th>Transcript HGVS IDs</th>
@@ -30,12 +30,12 @@
                     <td>{{ record.assembly_id|default("-",true) }}</td>
                     <td>{{ record.chromosome|default("-",true) }}</td>
                     <td>{{ record.refseq_id|default("-",true) }}</td>
-                    <td>{{ record.variant_name|default("-",true) }}</td>
                     <td>{{ record.reference|default("-",true) }}</td>
                     <td>{{ record.alternate|default("-",true) }}</td>
                     <td>{{ record.start|default("-",true) }}</td>
                     <td>{{ record.end|default("-",true) }}</td>
                     <td>{{ record.variant_type|default("-",true) }}</td>
+                    <td>{{ record.variant_name|default("-",true)|join(", ") }}</td>
                     <td>{{ record.genomic_hgvs_id|default("-",true) }}</td>
                     <td>{{ record.transcript_hgvs_ids|default("-",true)|join(", ") }}</td>
                     <td>{{ record.protein_hgvs_ids|default("-",true)|join(", ") }}</td>

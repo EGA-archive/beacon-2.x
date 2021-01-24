@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th class="extra-info-trigger"></th>
-                <th>Individual ID</th>
+                <th>Subject ID</th>
                 <th>Datasets IDs</th>
                 <th>Taxon</th>
                 <th>Sex</th>
@@ -40,6 +40,64 @@
                     <td class="hidden">
                         <h1><i class="fas fa-times close-button"></i>Individual {{ record.individual_stable_id|default("-",true) }}</h1>
                         <section>
+                            <h2>Phenotypic Features</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>phenotypeId</th>
+                                            <th>severity</th>
+                                            <th>onsetType</th>
+                                            <th>ageOfOnset</th>
+                                            <th>dateOfOnset</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for feature in record.phenotypic_features.parsed %}
+                                        <tr>
+                                            <td>{{ feature.phenotypeId|default("-",true) }}</td>
+                                            <td>{{ feature.severity|default("-",true) }}</td>
+                                            <td>{{ feature.onsetType|default("-",true) }}</td>
+                                            <td>{{ feature.ageOfOnset|default("-",true) }}</td>
+                                            <td>{{ feature.dateOfOnset|default("-",true) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <section>
+                            <h2>Diseases</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>diseaseId</th>
+                                            <th>stage</th>
+                                            <th>severity</th>
+                                            <th>onsetType</th>
+                                            <th>ageOfOnset</th>
+                                            <th>dateOfOnset</th>
+                                            <th>familyHistory</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for disease in record.diseases.parsed %}
+                                        <tr>
+                                            <td>{{ disease.diseaseId|default("-",true) }}</td>
+                                            <td>{{ disease.stage|default("-",true) }}</td>
+                                            <td>{{ disease.severity|default("-",true) }}</td>
+                                            <td>{{ disease.onsetType|default("-",true) }}</td>
+                                            <td>{{ disease.ageOfOnset|default("-",true) }}</td>
+                                            <td>{{ disease.dateOfOnset|default("-",true) }}</td>
+                                            <td>{{ disease.familyHistory|default("-",true) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>     
+                        <section>
                             <h2>Medications</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
@@ -67,22 +125,84 @@
                             </div>
                         </section>
                         <section>
-                            <h2>Procedures</h2>
+                            <h2>Interventions</h2>
                             <div class="extra-info-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>type</th>
+                                            <th>interventionId</th>
+                                            <th>modifier</th>
                                             <th>date</th>
+                                            <th>ageAtIntervention</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for procedure in record.procedures.parsed %}
                                         <tr>
-                                            <td>{{ procedure.type|default("-",true) }}</td>    
+                                            <td>{{ procedure.intervention_id|default("-",true) }}</td>    
+                                            <td>{{ procedure.modifier|default("-",true) }}</td>    
                                             <td>{{ procedure.date|default("-",true) }}</td>    
+                                            <td>{{ procedure.age_at_intervention|default("-",true) }}</td>    
                                         </tr>
                                         {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                    
+                        <section>
+                            <h2>Measures</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>measureId</th>
+                                            <th>modifier</th>
+                                            <th>date</th>
+                                            <th>ageAtMeasure</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--  for procedure in record.measures.parsed  -->
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <!-- <td> procedure.measure_id|default("-",true) </td>    
+                                            <td> procedure.modifier|default("-",true) </td>    
+                                            <td> procedure.date|default("-",true) </td>    
+                                            <td> procedure.age_at_measure|default("-",true) </td>     -->
+                                        </tr>
+                                        <!--  endfor  -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>                    
+                        <section>
+                            <h2>Exposures</h2>
+                            <div class="extra-info-table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>exposureId</th>
+                                            <th>modifier</th>
+                                            <th>date</th>
+                                            <th>ageAtExposure</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--  for procedure in record.exposures.parsed  -->
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <!-- <td> procedure.exposure_id|default("-",true) </td>    
+                                            <td> procedure.modifier|default("-",true) </td>    
+                                            <td> procedure.date|default("-",true) </td>    
+                                            <td> procedure.age_at_exposure|default("-",true) </td>     -->
+                                        </tr>
+                                        <!--  endfor  -->
                                     </tbody>
                                 </table>
                             </div>
@@ -114,64 +234,6 @@
                                 </table>
                             </div>
                         </section>      
-                        <section>
-                            <h2>Diseases</h2>
-                            <div class="extra-info-table-wrapper">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>diseaseId</th>
-                                            <th>stage</th>
-                                            <th>severity</th>
-                                            <th>onsetType</th>
-                                            <th>ageOfOnset</th>
-                                            <th>dateOfOnset</th>
-                                            <th>familyHistory</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for disease in record.diseases.parsed %}
-                                        <tr>
-                                            <td>{{ disease.diseaseId|default("-",true) }}</td>
-                                            <td>{{ disease.stage|default("-",true) }}</td>
-                                            <td>{{ disease.severity|default("-",true) }}</td>
-                                            <td>{{ disease.onsetType|default("-",true) }}</td>
-                                            <td>{{ disease.ageOfOnset|default("-",true) }}</td>
-                                            <td>{{ disease.dateOfOnset|default("-",true) }}</td>
-                                            <td>{{ disease.familyHistory|default("-",true) }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>      
-                        <section>
-                            <h2>Phenotypic Features</h2>
-                            <div class="extra-info-table-wrapper">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>phenotypeId</th>
-                                            <th>severity</th>
-                                            <th>onsetType</th>
-                                            <th>ageOfOnset</th>
-                                            <th>dateOfOnset</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for feature in record.phenotypic_features.parsed %}
-                                        <tr>
-                                            <td>{{ feature.phenotypeId|default("-",true) }}</td>
-                                            <td>{{ feature.severity|default("-",true) }}</td>
-                                            <td>{{ feature.onsetType|default("-",true) }}</td>
-                                            <td>{{ feature.ageOfOnset|default("-",true) }}</td>
-                                            <td>{{ feature.dateOfOnset|default("-",true) }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </section>
                         <section>
                             <h2>Handovers</h2>
                             <div class="extra-info-table-wrapper">
